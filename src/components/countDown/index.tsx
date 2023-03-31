@@ -13,6 +13,7 @@ const CountdownTimer: React.FC<Props> = ({ seconds, isNext, setIsNext }) => {
   const { setLoading, setOpenResultBoard } = useUser();
   const [play] = useSound("/sound/completed.mp3");
   const [timeLeft, setTimeLeft] = useState<number>(seconds);
+  
   useEffect(() => {
     let intervalId: any = null;
     if (isNext) {

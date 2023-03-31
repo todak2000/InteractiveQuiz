@@ -6,7 +6,7 @@ The game will include several features to make it more engaging and enjoyable. T
 
 ### URL
 
-https://techtime-226q.onrender.com
+https://interactivequiz.onrender.com
 
 <img width="1144" alt="Screen Shot 2023-03-31 at 1 01 41 AM" src="https://user-images.githubusercontent.com/26861798/228990510-3b1fdfc8-f05d-4440-8f3c-dcef79d65888.png">
 

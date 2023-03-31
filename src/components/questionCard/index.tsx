@@ -43,7 +43,7 @@ const QuestionCard: React.FC<CardItem> = ({
         <CountdownTimer seconds={sec} isNext={isNext} setIsNext={setIsNext} />
       </div>
       <GiSpellBook className="mt-6 text-5xl text-brand_primary md:mt-0" />
-      <p className="header-medium mt-4 text-center text-[20px] leading-[25px] md:text-[16px] md:leading-[22px]">
+      <p className="font-primary mt-4 text-center text-[20px] leading-[25px] md:text-[30px] md:leading-[42px]">
         {question}
       </p>
     </div>
