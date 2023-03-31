@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://techtime-226q.onrender.com
+
+# Sitemaps
+Sitemap: https://techtime-226q.onrender.com/sitemap.xml
