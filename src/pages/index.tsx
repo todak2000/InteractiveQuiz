@@ -61,7 +61,7 @@ export default function HomePage() {
 
   return (
     <Layout>
-      <Seo templateTitle="| Home" />
+      <Seo templateTitle="Home | " />
       <main className="grid-col-1 grid min-h-screen md:grid-cols-2">
         <section className="hidden min-h-full w-full flex-col items-center justify-center bg-brand_primary md:flex">
           <div className="flex flex-shrink-0 flex-col items-center justify-center">
