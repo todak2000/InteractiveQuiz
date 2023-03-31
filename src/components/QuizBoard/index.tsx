@@ -78,7 +78,7 @@ const QuizBoard: React.FC = () => {
     const oldIndex = questions[questionIndex]?.id;
 
     const updatedQuestionsArray = removeQuestion(questions, oldIndex);
-    if (updatedQuestionsArray.length > 0) {
+    if (updatedQuestionsArray.length > 0 && count < 9 ) {
       setQuestions(updatedQuestionsArray);
       setQuestionIndex(
         Math.floor(Math.random() * updatedQuestionsArray.length)
@@ -170,7 +170,7 @@ const QuizBoard: React.FC = () => {
                 question={questions[questionIndex]?.question}
                 quizScore={quizScore}
                 seconds={seconds}
-                len={questionsArray.length}
+                len={10}
                 count={count}
                 isNext={isNext}
                 setIsNext={setIsNext}

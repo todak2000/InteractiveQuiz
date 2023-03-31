@@ -87,14 +87,14 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    switch (userData.difficulty) {
-      case "1":
+    switch (Number(level)) {
+      case 1:
         setSeconds(15);
         break;
-      case "2":
+      case 2:
         setSeconds(10);
         break;
-      case "3":
+      case 3:
         setSeconds(7);
         break;
       default:

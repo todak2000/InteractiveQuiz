@@ -17,13 +17,14 @@ type TopBarProps = {
 
 const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
   const handleOpen = () => {
-    if (isReadInstructions) {
-      setOpenQuizBoard(!openQuizBoard);
+    setOpenQuizBoard(!openQuizBoard);
       setOpenResultBoard(false);
       setLoading(false);
-    } else {
-      setIsReadInstructions(true);
-    }
+    // if (isReadInstructions && openResultBoard) {
+      
+    // } else {
+    //   // setIsReadInstructions(true);
+    // }
   };
   const {
     setLevel,
@@ -36,6 +37,7 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
     openResultBoard,
     setOpenResultBoard,
     score,
+    level,
     setLoading,
   } = useUser();
   const { push } = useRouter();
@@ -83,12 +85,13 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
               name="difficulty"
               disabled={openQuizBoard || openResultBoard ? true : false}
             >
-              <option value={userData?.difficulty}>
-                {userData?.difficulty == 1 && "Easy"}
-                {userData?.difficulty == 2 && "Medium"}
-                {userData?.difficulty == 3 && "Hard"}
+              <option value={Number(level)}>
+                {Number(level) == 1 && "Easy"}
+                {Number(level) == 2 && "Medium"}
+                {Number(level) == 3 && "Hard"}
               </option>
-              {selectOptions.map(({ id, value, label }) => {
+            
+              {selectOptions.filter((option)=> option.value !== Number(level)).map(({ id, value, label }) => {
                 return (
                   <option key={id} value={value}>
                     {label}
@@ -106,12 +109,12 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
           >
             {openQuizBoard && !openResultBoard ? (
               <>
-                <FaStopCircle className="mr-2 text-lg text-white" />
+                <FaStopCircle className="md:mr-2 text-lg text-white" />
                 Stop Quiz
               </>
             ) : (
               <>
-                <GiTrophyCup className="mr-2 text-lg text-white" />
+                <GiTrophyCup className="md:mr-2 text-lg text-white" />
                 Start Quiz
               </>
             )}

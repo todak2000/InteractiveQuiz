@@ -14,7 +14,7 @@ const ProgressBar: React.FC<Props> = ({ value, max }) => {
         className="h-3 w-1/2 rounded-full bg-brand_primary"
         style={{ width: `${percent}%` }}
       />
-      <span>{`${percent}%`}</span>
+      <span>{`${value}/${max}`}</span>
     </div>
   );
 };
