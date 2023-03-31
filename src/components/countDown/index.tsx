@@ -46,4 +46,4 @@ const CountdownTimer: React.FC<Props> = ({ seconds, isNext, setIsNext }) => {
   );
 };
 
-export default CountdownTimer;
+export default React.memo(CountdownTimer);

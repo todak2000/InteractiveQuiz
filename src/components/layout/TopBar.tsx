@@ -85,7 +85,7 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
               name="difficulty"
               disabled={openQuizBoard || openResultBoard ? true : false}
             >
-              <option value={Number(level)}>
+              <option value={level}>
                 {Number(level) == 1 && "Easy"}
                 {Number(level) == 2 && "Medium"}
                 {Number(level) == 3 && "Hard"}

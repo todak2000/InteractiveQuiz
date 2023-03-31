@@ -19,4 +19,4 @@ const ProgressBar: React.FC<Props> = ({ value, max }) => {
   );
 };
 
-export default ProgressBar;
+export default React.memo(ProgressBar);

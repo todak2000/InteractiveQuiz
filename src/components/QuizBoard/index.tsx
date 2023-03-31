@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import QuestionCard from "../questionCard";
 import { questionsArray } from "@/constant";
 import AnswerCard from "../answerCard";
@@ -94,9 +94,13 @@ const QuizBoard: React.FC = () => {
     }
   };
 
-  const removeQuestion = (array: any[], id: number) => {
-    return array.filter((question) => question?.id !== id);
-  };
+  const removeQuestion = useCallback(
+    (array: any[], id: number) => {
+      return array.filter((question) => question?.id !== id);;
+    },
+    [],
+  );
+  
   const handleClose = () => {
     setOpenResultBoard(false);
     setOpenQuizBoard(false);
@@ -189,4 +193,4 @@ const QuizBoard: React.FC = () => {
   );
 };
 
-export default QuizBoard;
+export default React.memo(QuizBoard);

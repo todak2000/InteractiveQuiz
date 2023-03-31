@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
 import { MdCancel } from "react-icons/md";
 import useSound from "use-sound";
@@ -29,7 +29,7 @@ const AnswerCard: React.FC<CardItem> = ({
   };
 
   const [play] = useSound("/sound/correct.mp3");
-
+  
   useEffect(() => {
     if (isPickedId !== null) {
       let a = answerArr.filter((ans) => ans.isAnswer === true);
@@ -38,14 +38,27 @@ const AnswerCard: React.FC<CardItem> = ({
   }, [isPickedId]);
 
   useEffect(() => {
-    setAnswerArr(answerArray);
+    setAnswerArr(randomizeAnswerArr(answerArray))
     setCorrectAnsId(null);
     setIsPickedId(null);
   }, [answerArray]);
 
+
   const handleNext = () => {
     handleNextQuestion(correctAnsId === isPickedId);
   };
+  const randomizeAnswerArr = (arr:AnswerProps[])=> {
+    let randomizedArr = [];
+    let answerArrCopy = [...arr];
+    while (answerArrCopy.length > 0) {
+      let randIndex = Math.floor(Math.random() * answerArrCopy.length);
+      randomizedArr.push(answerArrCopy[randIndex]);
+      answerArrCopy.splice(randIndex, 1);
+    }
+    return randomizedArr;
+  }
+
+
 
   return (
     <div className="flex flex-col items-center justify-center rounded-lg bg-white p-4 md:h-[50vh]">
@@ -101,4 +114,4 @@ const AnswerCard: React.FC<CardItem> = ({
   );
 };
 
-export default AnswerCard;
+export default React.memo(AnswerCard);
