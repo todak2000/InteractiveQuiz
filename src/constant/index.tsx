@@ -464,7 +464,8 @@ export const questionsArray = [
   },
   {
     id: 22,
-    question: "Who is credited with the development of the theory of relativity?",
+    question:
+      "Who is credited with the development of the theory of relativity?",
     answerArr: [
       {
         id: 1,
@@ -758,7 +759,8 @@ export const questionsArray = [
   },
   {
     id: 36,
-    question: "Wich term is often used to describe people who can speak more than three languages",
+    question:
+      "Wich term is often used to describe people who can speak more than three languages",
     answerArr: [
       {
         id: 1,
@@ -923,21 +925,19 @@ export const questionsArray = [
         isAnswer: false,
       },
     ],
-  }
-  
+  },
 ];
 
 // Instructions
 export const instructionHeader = "Quiz Instructions";
 export const InstructionsArr = [
-
   {
     id: 1,
     text: "Each question in the quiz is of multiple-choice  format and timed 7 seconds (Hard leve), 10 seconds (Medium Level) or 7 seconds (Hard level).",
   },
   {
     id: 2,
-    text:"Read each question carefully and quickly to avoid timeout and end of quiz session, and click on the button next to proceed to next question. Each correct or incorrect response will result in appropriate feedback immediately. Onclick any option, your answer is taken and cannot be reversed."
+    text: "Read each question carefully and quickly to avoid timeout and end of quiz session, and click on the button next to proceed to next question. Each correct or incorrect response will result in appropriate feedback immediately. Onclick any option, your answer is taken and cannot be reversed.",
   },
   {
     id: 3,

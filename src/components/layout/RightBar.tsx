@@ -1,6 +1,6 @@
 import React from "react";
 import { GiBurningDot } from "react-icons/gi";
-import {IoCloseCircleSharp} from 'react-icons/io5'
+import { IoCloseCircleSharp } from "react-icons/io5";
 import {
   header,
   instructionHeader,
@@ -18,7 +18,7 @@ function RightBar() {
     setOpenResultBoard,
     setIsReadInstructions,
     setLoading,
-    isReadInstructions
+    isReadInstructions,
   } = useUser();
 
   const handleStart = () => {
@@ -27,9 +27,9 @@ function RightBar() {
     setIsReadInstructions(false);
     setLoading(false);
   };
-  const handleInstructions =()=>{
-    setIsReadInstructions(!isReadInstructions)
-  }
+  const handleInstructions = () => {
+    setIsReadInstructions(!isReadInstructions);
+  };
   return (
     <>
       <section className="absolute top-0 right-0 z-10 hidden h-[100vh] w-full bg-black opacity-30 md:block"></section>
@@ -61,15 +61,14 @@ function RightBar() {
             )}
           </Button>
           <button
-              className=" absolute bottom-10 flex h-8 w-[130px] flex-row items-center justify-between bg-transparent px-4 text-[10px] leading-[14px] text-[#414141] disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
-              onClick={() => {
-                handleInstructions();
-              }}
-            >
-              <IoCloseCircleSharp className="text-lg text-[#414141]" />
-                  Close Instructions
-
-            </button>
+            className=" absolute bottom-10 flex h-8 w-[130px] flex-row items-center justify-between bg-transparent px-4 text-[10px] leading-[14px] text-[#414141] disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
+            onClick={() => {
+              handleInstructions();
+            }}
+          >
+            <IoCloseCircleSharp className="text-lg text-[#414141]" />
+            Close Instructions
+          </button>
         </div>
       </div>
     </>
