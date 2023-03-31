@@ -18,10 +18,10 @@ type TopBarProps = {
 const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
   const handleOpen = () => {
     setOpenQuizBoard(!openQuizBoard);
-      setOpenResultBoard(false);
-      setLoading(false);
+    setOpenResultBoard(false);
+    setLoading(false);
     // if (isReadInstructions && openResultBoard) {
-      
+
     // } else {
     //   // setIsReadInstructions(true);
     // }
@@ -90,14 +90,16 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
                 {Number(level) == 2 && "Medium"}
                 {Number(level) == 3 && "Hard"}
               </option>
-            
-              {selectOptions.filter((option)=> option.value !== Number(level)).map(({ id, value, label }) => {
-                return (
-                  <option key={id} value={value}>
-                    {label}
-                  </option>
-                );
-              })}
+
+              {selectOptions
+                .filter((option) => option.value !== Number(level))
+                .map(({ id, value, label }) => {
+                  return (
+                    <option key={id} value={value}>
+                      {label}
+                    </option>
+                  );
+                })}
             </select>
           </span>
           <button
@@ -109,12 +111,12 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
           >
             {openQuizBoard && !openResultBoard ? (
               <>
-                <FaStopCircle className="md:mr-2 text-lg text-white" />
+                <FaStopCircle className="text-lg text-white md:mr-2" />
                 Stop Quiz
               </>
             ) : (
               <>
-                <GiTrophyCup className="md:mr-2 text-lg text-white" />
+                <GiTrophyCup className="text-lg text-white md:mr-2" />
                 Start Quiz
               </>
             )}
