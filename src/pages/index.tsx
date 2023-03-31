@@ -51,12 +51,10 @@ export default function HomePage() {
     setName(newUser?.name);
     setScore(newUser?.latest_score);
     setLevel(newUser.difficulty);
-    setTimeout(() => {
-      if (name !== "") {
-        push("/quiz");
-        setLoading(false);
-      }
-    }, 3000);
+    if (name !== "") {
+      push("/quiz");
+      setLoading(false);
+    }
   };
 
   return (

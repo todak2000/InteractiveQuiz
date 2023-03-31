@@ -57,4 +57,4 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
   }
 );
 
-export default TextInput;
+export default React.memo(TextInput);

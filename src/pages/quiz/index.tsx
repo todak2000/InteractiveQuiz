@@ -71,4 +71,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default React.memo(Dashboard);

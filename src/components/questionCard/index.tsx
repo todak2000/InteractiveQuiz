@@ -50,4 +50,4 @@ const QuestionCard: React.FC<CardItem> = ({
   );
 };
 
-export default QuestionCard;
+export default React.memo(QuestionCard);
