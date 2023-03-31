@@ -2,19 +2,19 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 const defaultMeta = {
-  title: "TechTime",
-  siteName: "TechTime",
+  title: "Interactive Quiz",
+  siteName: "Interactive Quiz",
   description:
-    "Build your future with our quality education. the best and largest all-in-one online tutoring platform in the world ",
+    "An interactive quiz game that allows users to answer multiple-choice questions",
   /** Without additional '/' on the end, e.g. https://theodorusclarence.com */
-  url: "https://techtime-226q.onrender.com",
+  url: "https://interactivequiz.onrender.com",
   type: "website",
   robots: "follow, index",
   /**
    * No need to be filled, will be populated with openGraph function
    * If you wish to use a normal image, just specify the path below
    */
-  image: "https://techtime-226q.onrender.com/images/large-og.png",
+  image: "https://interactivequiz.onrender.com/images/large-og.png",
 };
 
 type SeoProps = {
