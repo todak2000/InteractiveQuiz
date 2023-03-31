@@ -70,6 +70,10 @@ export default function HomePage() {
           </div>
         </section>
         <section className="flex min-h-full w-full flex-col items-center justify-center bg-brand_secondary">
+        <div className="md:hidden flex flex-shrink-0 flex-col items-center my-6 justify-center">
+            <GiBurningDot className="text-6xl text-brand_primary" />
+            <p className="header-text text-brand_primary">{header}</p>
+          </div>
           <p className="header-text">{whiteHeaderText}</p>
           <div className="mt-4 flex w-full flex-col items-center justify-center">
             <TextInput
@@ -83,7 +87,7 @@ export default function HomePage() {
               onChange={handleChange}
               name="difficulty"
             >
-              <option value="">Please choose&hellip;</option>
+              <option value="">Select Difficulty level&hellip;</option>
               {selectOptions.map(({ id, value, label }) => {
                 return (
                   <option key={id} value={value}>

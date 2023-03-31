@@ -43,7 +43,7 @@ function RightBar() {
             return (
               <p
                 key={id}
-                className="normal-text m-1 flex w-full flex-row items-center justify-start text-left text-[12px] leading-[14px] md:text-sm"
+                className="normal-text m-1 flex w-full flex-row items-center justify-start text-left text-[15px] leading-[18px] md:text-sm"
               >
                 {text}
               </p>
