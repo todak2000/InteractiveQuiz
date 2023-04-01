@@ -80,8 +80,8 @@ const AnswerCard: React.FC<CardItem> = ({
             key={id}
             className={`${
               isPickedId !== null && correctAnsId === id && isPickedId === id
-                ? "mt-4 flex h-[45px] w-2/3 flex-row items-center justify-center rounded-lg bg-brand_primary text-white"
-                : " mt-4 flex h-[45px] w-2/3 flex-row items-center justify-center rounded-lg border-[1px] border-brand_primary bg-white text-brand_primary"
+                ? "mt-4 flex h-[45px] w-full md:w-2/3 flex-row items-center justify-center rounded-lg bg-brand_primary text-white"
+                : " mt-4 flex h-[45px] w-full md:w-2/3 flex-row items-center justify-center rounded-lg border-[1px] border-brand_primary bg-white text-brand_primary"
             }`}
             disabled={isPickedId !== null ? true : false}
             onClick={() => {
