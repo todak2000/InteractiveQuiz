@@ -96,8 +96,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [questions, setQuestions] = useState([]);
 
   const generateQuestions = async () => {
+   
     let body: string = `
-    kindly generate an array of 10 random but authentic  from science, art, management, sports, economics, finance, sports, and english grammar quiz questions and answer using the below format:
+    kindly generate an array of 3 random but authentic  from science, art, management, sports, economics, finance, sports, and english grammar quiz questions and answer using the below format:
 {
     "id": 1,
 		"question": "What is the boiling point of water?",
