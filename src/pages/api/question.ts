@@ -16,7 +16,7 @@ const generateQuestions = async ({
         },
         body: JSON.stringify({
           prompt: prompt,
-          max_tokens: 1500,
+          max_tokens: 2000,
           temperature: 0.7,
         }),
       }
