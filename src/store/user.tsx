@@ -130,7 +130,7 @@ see how i want the result::
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt: body }),
+      body: JSON.stringify({ prompt: 'what is capitalism' }),
     });
     const data = await res.json();
     // console.log(data.questions, 'check return data')
