@@ -134,9 +134,9 @@ see how i want the result::
     });
     const data = await res.json();
     // console.log(data.questions, 'check return data')
-    let x = JSON.stringify(data.questions);
-    let y = JSON.parse(x);
-    let z = JSON.parse(y);
+    // let x = JSON.stringify(data.questions);
+    // let y = JSON.parse(x);
+    // let z = JSON.parse(y);
 
     // return z?.questions;
     return data.questions
