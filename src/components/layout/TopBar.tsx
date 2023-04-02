@@ -18,22 +18,25 @@ type TopBarProps = {
 
 const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
   const handleOpen = () => {
-    setLoading(true)
-    generateQuestions().then
-    ((res:any[])=>{
-      setQuestions(res)
-    }).then(
-      ()=>{
-        setLoading(false)
+    setLoading(true);
+    generateQuestions()
+      .then((res: any[]) => {
+        setQuestions(res);
+      })
+      .then(() => {
+        setLoading(false);
         setOpenQuizBoard(!openQuizBoard);
         setOpenResultBoard(false);
-      }
-    ).catch((error:any) => {
-      console.log(error)
-      setLoading(false)
-    });
-
+      })
+      .catch((error: any) => {
+        console.log(error);
+        setLoading(false);
+      });
   };
+  const handleStop =()=>{
+    setOpenQuizBoard(!openQuizBoard);
+        setOpenResultBoard(false);
+  }
   const {
     setLevel,
     setUserData,
@@ -48,7 +51,7 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
     level,
     setLoading,
     questions,
-    generateQuestions
+    generateQuestions,
   } = useUser();
   const { push } = useRouter();
   const [scoree, setScoree] = useState(score);
@@ -57,10 +60,10 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
   }, [score]);
 
   useEffect(() => {
-    console.log(questions, 'ques arr')
-    console.log(loading, 'loading')
-  }, [loading])
-  
+    console.log(questions, "ques arr");
+    console.log(loading, "loading");
+  }, [loading]);
+
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLevel(Number(e.target.value));
     setUserData({
@@ -90,9 +93,7 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
             {level == 2 && (
               <SiProgress className="ml-1 text-yellow-300 md:ml-2" />
             )}
-            {level == 3 && (
-              <SiProgress className="ml-1 text-red-300 md:ml-2" />
-            )}
+            {level == 3 && <SiProgress className="ml-1 text-red-300 md:ml-2" />}
 
             <select
               className="hover:text-primary-600 active:text-primary-700 ml-1 w-[100px] rounded-sm border-0 text-[10px] text-xs md:ml-4 md:text-[#414141]"
@@ -119,28 +120,30 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
           </span>
           <button
             className="flex h-8 w-[100px] flex-row items-center justify-between rounded-sm bg-brand_primary px-4 text-[10px] leading-[14px] text-white disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
-            onClick={() => {
+            onClick={() => { openQuizBoard && !openResultBoard ? handleStop():
               handleOpen();
             }}
             disabled={openResultBoard || loading ? true : false}
           >
-            {loading ? 
-              <><ImSpinner2 className="animate-spin md:mr-1" /> Please wait</>
-            :
-            <>
-            {openQuizBoard && !openResultBoard ? (
+            {loading ? (
               <>
-                <FaStopCircle className="text-lg text-white md:mr-2" />
-                Stop Quiz
+                <ImSpinner2 className="animate-spin md:mr-1" /> Please wait
               </>
             ) : (
               <>
-                <GiTrophyCup className="text-lg text-white md:mr-2" />
-                Start Quiz
+                {openQuizBoard && !openResultBoard ? (
+                  <>
+                    <FaStopCircle className="text-lg text-white md:mr-2" />
+                    Stop Quiz
+                  </>
+                ) : (
+                  <>
+                    <GiTrophyCup className="text-lg text-white md:mr-2" />
+                    Start Quiz
+                  </>
+                )}
               </>
             )}
-            </>
-            }
           </button>
           <span
             className="ml-1 hidden cursor-pointer md:ml-10 md:flex"

@@ -94,24 +94,21 @@ const QuizBoard: React.FC = () => {
     }
   };
 
-  const removeQuestion = useCallback(
-    (array: any[], id: number) => {
-      return array.filter((question) => question?.id !== id);;
-    },
-    [],
-  );
-  
+  const removeQuestion = useCallback((array: any[], id: number) => {
+    return array.filter((question) => question?.id !== id);
+  }, []);
+
   const handleClose = () => {
     setOpenResultBoard(false);
     setOpenQuizBoard(false);
   };
 
   useEffect(() => {
-    if (questions.length <=0) {
-      setQuestions(questionsArray)
+    if (questions.length <= 0) {
+      setQuestions(questionsArray);
     }
-  }, [])
-  
+  }, [questions.length, setQuestions]);
+
   const cardData = [
     {
       id: 1,

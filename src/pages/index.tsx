@@ -68,7 +68,7 @@ export default function HomePage() {
           </div>
         </section>
         <section className="flex min-h-full w-full flex-col items-center justify-center bg-brand_secondary">
-        <div className="md:hidden flex flex-shrink-0 flex-col items-center my-6 justify-center">
+          <div className="my-6 flex flex-shrink-0 flex-col items-center justify-center md:hidden">
             <GiBurningDot className="text-6xl text-brand_primary" />
             <p className="header-text text-brand_primary">{header}</p>
           </div>

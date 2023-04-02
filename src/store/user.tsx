@@ -55,9 +55,9 @@ const UserContext = createContext<UserContextProps>({
   isReadInstructions: false,
   setIsReadInstructions: () => null,
   questions: [],
-  setQuestions: ()=>null,
+  setQuestions: () => null,
 
-  generateQuestions: ()=> null,
+  generateQuestions: () => null,
 });
 
 let userObject = {
@@ -81,7 +81,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [name, setName] = useLocalStorageState(userObject);
   const [score, setScore] = useLocalStorageState(scoreObject);
   const [level, setLevel] = useLocalStorageState(levelObject);
-  const [isReadInstructions, setIsReadInstructions] = useLocalStorageState(readObject);
+  const [isReadInstructions, setIsReadInstructions] =
+    useLocalStorageState(readObject);
 
   const [userData, setUserData] = useState({
     name: name,
@@ -95,7 +96,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [questions, setQuestions] = useState([]);
 
   const generateQuestions = async () => {
-    let body:string = `
+    let body: string = `
     kindly generate an array of 10 random but authentic  from science, art, management, sports, economics, finance, sports, and english grammar quiz questions and answer using the below format:
 {
     "id": 1,
@@ -128,16 +129,15 @@ see how i want the result::
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({prompt: body}),
+      body: JSON.stringify({ prompt: body }),
     });
     const data = await res.json();
-   
-    let x = JSON.stringify(data.questions)
-    let y = JSON.parse(x)
-    let z = JSON.parse(y)
-   
-    return z?.questions
 
+    let x = JSON.stringify(data.questions);
+    let y = JSON.parse(x);
+    let z = JSON.parse(y);
+
+    return z?.questions;
   };
   useEffect(() => {
     switch (level) {
@@ -149,9 +149,6 @@ see how i want the result::
         break;
       case 3:
         setSeconds(7);
-        break;
-      default:
-        setSeconds(15);
         break;
     }
   }, [level]);
@@ -178,8 +175,8 @@ see how i want the result::
         isReadInstructions,
         setIsReadInstructions,
         generateQuestions,
-        questions, 
-        setQuestions
+        questions,
+        setQuestions,
       }}
     >
       {children}

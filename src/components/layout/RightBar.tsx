@@ -49,7 +49,7 @@ function RightBar() {
               </p>
             );
           })}
-          <Button
+          {/* <Button
             variant="submit"
             className="mt-4 h-[45px] w-2/3"
             onClick={handleStart}
@@ -59,7 +59,7 @@ function RightBar() {
             ) : (
               instructionButtonText
             )}
-          </Button>
+          </Button> */}
           <button
             className="mt-6 flex h-8 w-[130px] flex-row items-center justify-between bg-transparent px-4 text-[10px] leading-[14px] text-[#414141] disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
             onClick={() => {

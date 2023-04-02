@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://techtime-226q.onrender.com
+Host: https://interactivequiz.onrender.com
 
 # Sitemaps
-Sitemap: https://techtime-226q.onrender.com/sitemap.xml
+Sitemap: https://interactivequiz.onrender.com/sitemap.xml
