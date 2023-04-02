@@ -61,7 +61,7 @@ function RightBar() {
             )}
           </Button>
           <button
-            className=" absolute bottom-10 flex h-8 w-[130px] flex-row items-center justify-between bg-transparent px-4 text-[10px] leading-[14px] text-[#414141] disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
+            className="mt-6 flex h-8 w-[130px] flex-row items-center justify-between bg-transparent px-4 text-[10px] leading-[14px] text-[#414141] disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
             onClick={() => {
               handleInstructions();
             }}

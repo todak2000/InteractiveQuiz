@@ -2,6 +2,8 @@
 export const header = "Interactive Quiz";
 export const whiteHeaderText = "Get Started";
 export const homeButtonText = "Begin";
+export const sharedUrl = "https://interactivequiz.onrender.com/";
+export const oldShareUrl = "https://i.postimg.cc/4xCdmLgm/1111.png";
 export const selectOptions = [
   {
     id: 1,

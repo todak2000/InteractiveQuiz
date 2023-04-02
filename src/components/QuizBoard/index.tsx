@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import QuestionCard from "../questionCard";
-import { questionsArray } from "@/constant";
+import { questionsArray, sharedUrl } from "@/constant";
 import AnswerCard from "../answerCard";
 import { useUser } from "@/store/user";
 import Card from "@/components/Card";
@@ -24,17 +24,16 @@ import useSound from "use-sound";
 const QuizBoard: React.FC = () => {
   const {
     score,
-    userData,
-    setSeconds,
     setOpenQuizBoard,
     seconds,
     setScore,
+    questions,
+    setQuestions,
     openResultBoard,
     setOpenResultBoard,
     setLoading,
     loading,
   } = useUser();
-  const [questions, setQuestions] = useState<any[]>(questionsArray);
   const [quizScore, setQuizScore] = useState<number>(0);
   const [isNext, setIsNext] = useState(false);
   const [count, setCount] = useState(0);
@@ -107,6 +106,12 @@ const QuizBoard: React.FC = () => {
     setOpenQuizBoard(false);
   };
 
+  useEffect(() => {
+    if (questions.length <=0) {
+      setQuestions(questionsArray)
+    }
+  }, [])
+  
   const cardData = [
     {
       id: 1,
@@ -132,30 +137,30 @@ const QuizBoard: React.FC = () => {
 
               <div className="my-10 flex w-full flex-row items-center justify-evenly md:w-1/2 ">
                 <FacebookShareButton
-                  url="https://i.postimg.cc/4xCdmLgm/1111.png"
+                  url={sharedUrl}
                   quote={`I just got a score of ${quizScore} playing this quiz`}
                 >
                   <FacebookIcon size={32} round />
                 </FacebookShareButton>
                 <WhatsappShareButton
-                  url="https://i.postimg.cc/4xCdmLgm/1111.png"
+                  url={sharedUrl}
                   title={`I just got a score of ${quizScore} playing this quiz`}
                   separator=":: "
                 >
                   <WhatsappIcon size={32} round />
                 </WhatsappShareButton>
-                <LinkedinShareButton url="https://i.postimg.cc/4xCdmLgm/1111.png">
+                <LinkedinShareButton url={sharedUrl}>
                   <LinkedinIcon size={32} round />
                 </LinkedinShareButton>
                 <TwitterShareButton
-                  url="https://i.postimg.cc/4xCdmLgm/1111.png"
+                  url={sharedUrl}
                   title={`I just got a score of ${quizScore} playing this quiz`}
                   className="Demo__some-network__share-button"
                 >
                   <TwitterIcon size={32} round />
                 </TwitterShareButton>
                 <TelegramShareButton
-                  url="https://i.postimg.cc/4xCdmLgm/1111.png"
+                  url={sharedUrl}
                   title={`I just got a score of ${quizScore} playing this quiz`}
                   className="Demo__some-network__share-button"
                 >

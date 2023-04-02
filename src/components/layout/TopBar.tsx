@@ -10,6 +10,7 @@ import { SiProgress } from "react-icons/si";
 import { selectOptions } from "@/constant";
 import { GiTwoCoins } from "react-icons/gi";
 import CountUp from "react-countup";
+import { ImSpinner2 } from "react-icons/im";
 
 type TopBarProps = {
   username: string | any;
@@ -17,28 +18,37 @@ type TopBarProps = {
 
 const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
   const handleOpen = () => {
-    setOpenQuizBoard(!openQuizBoard);
-    setOpenResultBoard(false);
-    setLoading(false);
-    // if (isReadInstructions && openResultBoard) {
+    setLoading(true)
+    generateQuestions().then
+    ((res:any[])=>{
+      setQuestions(res)
+    }).then(
+      ()=>{
+        setLoading(false)
+        setOpenQuizBoard(!openQuizBoard);
+        setOpenResultBoard(false);
+      }
+    ).catch((error:any) => {
+      console.log(error)
+      setLoading(false)
+    });
 
-    // } else {
-    //   // setIsReadInstructions(true);
-    // }
   };
   const {
     setLevel,
     setUserData,
     userData,
-    setIsReadInstructions,
-    isReadInstructions,
+    loading,
     setOpenQuizBoard,
     openQuizBoard,
     openResultBoard,
+    setQuestions,
     setOpenResultBoard,
     score,
     level,
     setLoading,
+    questions,
+    generateQuestions
   } = useUser();
   const { push } = useRouter();
   const [scoree, setScoree] = useState(score);
@@ -46,11 +56,16 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
     setScoree(score);
   }, [score]);
 
+  useEffect(() => {
+    console.log(questions, 'ques arr')
+    console.log(loading, 'loading')
+  }, [loading])
+  
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLevel(Number(e.target.value));
     setUserData({
       ...userData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: Number(e.target.value),
     });
   };
 
@@ -69,13 +84,13 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
           </span>
           <span className="normal-text flex flex-row items-center text-[xs]">
             <span className="hidden md:flex">Difficulty level:</span>
-            {userData?.difficulty == 1 && (
+            {level == 1 && (
               <SiProgress className="ml-1 text-green-300 md:ml-2" />
             )}
-            {userData?.difficulty == 2 && (
+            {level == 2 && (
               <SiProgress className="ml-1 text-yellow-300 md:ml-2" />
             )}
-            {userData?.difficulty == 3 && (
+            {level == 3 && (
               <SiProgress className="ml-1 text-red-300 md:ml-2" />
             )}
 
@@ -86,13 +101,13 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
               disabled={openQuizBoard || openResultBoard ? true : false}
             >
               <option value={level}>
-                {Number(level) == 1 && "Easy"}
-                {Number(level) == 2 && "Medium"}
-                {Number(level) == 3 && "Hard"}
+                {level == 1 && "Easy"}
+                {level == 2 && "Medium"}
+                {level == 3 && "Hard"}
               </option>
 
               {selectOptions
-                .filter((option) => option.value !== Number(level))
+                .filter((option) => option.value !== level)
                 .map(({ id, value, label }) => {
                   return (
                     <option key={id} value={value}>
@@ -107,8 +122,12 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
             onClick={() => {
               handleOpen();
             }}
-            disabled={openResultBoard ? true : false}
+            disabled={openResultBoard || loading ? true : false}
           >
+            {loading ? 
+              <><ImSpinner2 className="animate-spin md:mr-1" /> Please wait</>
+            :
+            <>
             {openQuizBoard && !openResultBoard ? (
               <>
                 <FaStopCircle className="text-lg text-white md:mr-2" />
@@ -120,6 +139,8 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
                 Start Quiz
               </>
             )}
+            </>
+            }
           </button>
           <span
             className="ml-1 hidden cursor-pointer md:ml-10 md:flex"

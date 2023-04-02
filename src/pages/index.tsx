@@ -50,7 +50,7 @@ export default function HomePage() {
     setLoading(true);
     setName(newUser?.name);
     setScore(newUser?.latest_score);
-    setLevel(newUser.difficulty);
+    setLevel(Number(newUser?.difficulty));
     if (name !== "") {
       push("/quiz");
       setLoading(false);

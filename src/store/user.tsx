@@ -28,6 +28,10 @@ export type UserContextProps = {
   setSeconds: React.Dispatch<React.SetStateAction<number>>;
   isReadInstructions: boolean;
   setIsReadInstructions: React.Dispatch<React.SetStateAction<boolean>>;
+  questions: any;
+  setQuestions: React.Dispatch<React.SetStateAction<any>>;
+
+  generateQuestions: any;
 };
 
 const UserContext = createContext<UserContextProps>({
@@ -50,6 +54,10 @@ const UserContext = createContext<UserContextProps>({
   setSeconds: () => null,
   isReadInstructions: false,
   setIsReadInstructions: () => null,
+  questions: [],
+  setQuestions: ()=>null,
+
+  generateQuestions: ()=> null,
 });
 
 let userObject = {
@@ -73,8 +81,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [name, setName] = useLocalStorageState(userObject);
   const [score, setScore] = useLocalStorageState(scoreObject);
   const [level, setLevel] = useLocalStorageState(levelObject);
-  const [isReadInstructions, setIsReadInstructions] =
-    useLocalStorageState(readObject);
+  const [isReadInstructions, setIsReadInstructions] = useLocalStorageState(readObject);
 
   const [userData, setUserData] = useState({
     name: name,
@@ -85,9 +92,55 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [openResultBoard, setOpenResultBoard] = useState(false);
   const [seconds, setSeconds] = useState(15);
   const [loading, setLoading] = useState(false);
+  const [questions, setQuestions] = useState([]);
 
+  const generateQuestions = async () => {
+    let body:string = `
+    kindly generate an array of 10 random but authentic  from science, art, management, sports, economics, finance, sports, and english grammar quiz questions and answer using the below format:
+{
+    "id": 1,
+		"question": "What is the boiling point of water?",
+		"answerArr": [{
+				"id": 1,
+				"text": "100°C",
+				"isAnswer": true
+			},
+			{
+				"id": 2,
+				"text": "212°F",
+				"isAnswer": false
+			},
+			{
+				"id": 3,
+				"text": "0°C",
+				"isAnswer": false
+			}
+		]
+  },
+create an object  with key 'questions' and pass an array of objects of above example. Also ensure the questions are not more than 10 words, answers not more than six words.
+see how i want the result::
+{
+  "questions": [{}, {}]
+}`;
+
+    const res = await fetch("/api/question", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({prompt: body}),
+    });
+    const data = await res.json();
+   
+    let x = JSON.stringify(data.questions)
+    let y = JSON.parse(x)
+    let z = JSON.parse(y)
+   
+    return z?.questions
+
+  };
   useEffect(() => {
-    switch (Number(level)) {
+    switch (level) {
       case 1:
         setSeconds(15);
         break;
@@ -101,7 +154,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setSeconds(15);
         break;
     }
-  }, [userData.difficulty]);
+  }, [level]);
 
   return (
     <UserContext.Provider
@@ -124,6 +177,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setSeconds,
         isReadInstructions,
         setIsReadInstructions,
+        generateQuestions,
+        questions, 
+        setQuestions
       }}
     >
       {children}
