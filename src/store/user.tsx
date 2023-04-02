@@ -132,9 +132,8 @@ see how i want the result::
       body: JSON.stringify({ prompt: body }),
     });
     const data = await res.json();
-
-    let x = JSON.stringify(data.questions);
     console.log(data.questions, 'check return data')
+    let x = JSON.stringify(data.questions);
     let y = JSON.parse(x);
     let z = JSON.parse(y);
 
