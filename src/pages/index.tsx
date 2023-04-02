@@ -65,6 +65,7 @@ export default function HomePage() {
           <div className="flex flex-shrink-0 flex-col items-center justify-center">
             <GiBurningDot className="text-6xl text-white" />
             <p className="header-text text-white">{header}</p>
+            <p>{process.env.NEXT_PUBLIC_OPENAI_API_KEY}</p>
           </div>
         </section>
         <section className="flex min-h-full w-full flex-col items-center justify-center bg-brand_secondary">
