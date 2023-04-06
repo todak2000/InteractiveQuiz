@@ -29,8 +29,8 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({
   };
 
   const classname =
-    href === pathname.split("/quiz/").pop() ||
-    href === pathname.split("/leadership/").pop()
+    href === pathname.split("/quiz").pop() ||
+    href === pathname.split("/board").pop()
       ? `${activeBg} rounded-l-lg w-full h-12 ${activeText} flex flex-row text-sm items-center pl-8 my-3`
       : `${inactiveBg} rounded-l-lg w-full h-12 text-white flex flex-row items-center pl-8 my-3 text-sm`;
 

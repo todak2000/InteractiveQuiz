@@ -1,11 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { useLocalStorageState } from "../hooks";
+import { boardProps } from "@/pages/board";
 
 export type UserProp = {
   name: string;
   difficulty: number;
   latest_score: number;
+  avatar: string | any | null;
+  email: string;
 };
 
 export type UserContextProps = {
@@ -13,7 +16,8 @@ export type UserContextProps = {
   setUserData: React.Dispatch<React.SetStateAction<any>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-
+  setBoardData:React.Dispatch<React.SetStateAction<any[]>>
+  boardData:  boardProps[];
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
   level: number;
@@ -28,6 +32,12 @@ export type UserContextProps = {
   setSeconds: React.Dispatch<React.SetStateAction<number>>;
   isReadInstructions: boolean;
   setIsReadInstructions: React.Dispatch<React.SetStateAction<boolean>>;
+  email: any,
+  setEmail: React.Dispatch<React.SetStateAction<any>>,
+  token: any;
+  setToken: React.Dispatch<React.SetStateAction<any>>;
+  avatar: any;
+  setAvatar: React.Dispatch<React.SetStateAction<any>>;
 };
 
 const UserContext = createContext<UserContextProps>({
@@ -35,7 +45,8 @@ const UserContext = createContext<UserContextProps>({
   setUserData: () => null,
   loading: false,
   setLoading: () => null,
-
+  setBoardData: ()=> null,
+  boardData: [],
   name: "",
   setName: () => null,
   level: 1,
@@ -50,6 +61,12 @@ const UserContext = createContext<UserContextProps>({
   setSeconds: () => null,
   isReadInstructions: false,
   setIsReadInstructions: () => null,
+  token: false,
+  setToken: () => null,
+  email: false,
+  setEmail: () => null,
+  avatar: false,
+  setAvatar: () => null,
 });
 
 let userObject = {
@@ -68,11 +85,25 @@ let readObject = {
   key: "isReadInstructions",
   defaultValue: false,
 };
-
+let tokenObject = {
+  key: "token",
+  defaultValue: '',
+};
+let emailObject = {
+  key: "email",
+  defaultValue: '',
+};
+let avatarObject = {
+  key: "avatar",
+  defaultValue: '',
+};
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [name, setName] = useLocalStorageState(userObject);
   const [score, setScore] = useLocalStorageState(scoreObject);
   const [level, setLevel] = useLocalStorageState(levelObject);
+  const [token, setToken] = useLocalStorageState(tokenObject);
+  const [email, setEmail] = useLocalStorageState(emailObject);
+  const [avatar, setAvatar] = useLocalStorageState(avatarObject);
   const [isReadInstructions, setIsReadInstructions] =
     useLocalStorageState(readObject);
 
@@ -80,12 +111,16 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     name: name,
     difficulty: level,
     latest_score: score,
+    avatar: avatar,
+    email:email
   });
   const [openQuizBoard, setOpenQuizBoard] = useState(false);
   const [openResultBoard, setOpenResultBoard] = useState(false);
+  const [boardData, setBoardData] = useState<any[]>([])
   const [seconds, setSeconds] = useState(15);
   const [loading, setLoading] = useState(false);
 
+  
   useEffect(() => {
     switch (Number(level)) {
       case 1:
@@ -110,6 +145,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setUserData,
         loading,
         setLoading,
+        token,
+        setToken,
+        avatar,
+        setAvatar,
+        email, 
+        setEmail,
         name,
         setName,
         level,
@@ -124,6 +165,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setSeconds,
         isReadInstructions,
         setIsReadInstructions,
+        boardData, setBoardData
       }}
     >
       {children}

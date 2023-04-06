@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Mainboard from "@/pages/common/mainboard";
 import Card from "@/components/Card";
 import { useUser } from "@/store/user";
@@ -6,6 +6,7 @@ import { MdLeaderboard } from "react-icons/md";
 import { GiTwoCoins } from "react-icons/gi";
 import QuizBoard from "@/components/QuizBoard";
 import { FaBookReader } from "react-icons/fa";
+import { sortFilterPosition } from "@/utils";
 
 function Dashboard() {
   const dashboardData = {
@@ -17,12 +18,19 @@ function Dashboard() {
     setOpenResultBoard,
     setIsReadInstructions,
     isReadInstructions,
+    boardData,
+    userData,
     setOpenQuizBoard,
   } = useUser();
 
   const handleInstructions = () => {
     setIsReadInstructions(!isReadInstructions);
   };
+  const position = useCallback(() => {
+    const position = sortFilterPosition(boardData).filter((item)=> item.email === userData?.email)[0].position
+    return position;
+}, [boardData]);
+ 
   const cardData = [
     {
       id: 1,
@@ -33,7 +41,7 @@ function Dashboard() {
     {
       id: 2,
       text: "Leadrboard Rank",
-      value: 100,
+      value: position(),
       icon: <MdLeaderboard className="text-6xl text-brand_primary" />,
     },
   ];
@@ -41,6 +49,7 @@ function Dashboard() {
   useEffect(() => {
     setOpenQuizBoard(false);
     setOpenResultBoard(false);
+
   }, []);
 
   return (

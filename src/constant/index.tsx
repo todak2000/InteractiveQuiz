@@ -953,3 +953,18 @@ export const InstructionsArr = [
   },
 ];
 export const instructionButtonText = "Lets Get Started";
+
+export const boardTableHeader = [
+  {
+    id: 1,
+    text: 'Position'
+  },
+  {
+    id: 2,
+    text: 'User'
+  },
+  {
+    id: 3,
+    text: 'Score'
+  },
+]

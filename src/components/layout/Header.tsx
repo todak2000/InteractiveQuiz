@@ -10,7 +10,10 @@ function Header() {
     setAvatar(`https://picsum.photos/200`);
   }, []);
 
-  const links = [{ id: 1, href: `/quiz`, label: "Quizboard" }];
+  const links = [
+    { id: 1, href: `/quiz`, label: "Quizboard" }, 
+    { id: 2, href: `/board`, label: "Leadersboard" }, 
+];
   return (
     <>
       <section className="sidebar hidden h-full min-h-[100vh] bg-brand_primary md:col-span-2 md:block md:pl-8  md:pr-12">

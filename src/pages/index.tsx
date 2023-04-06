@@ -13,20 +13,28 @@ import Button from "@/components/buttons/Button";
 import { useUser, UserProp } from "@/store/user";
 import { useRouter } from "next/router";
 import { ImSpinner2 } from "react-icons/im";
+import { handleGoogleAuth } from "@/firebase";
+
 export default function HomePage() {
   const [newUser, setNewUser] = useState<UserProp>({
     name: "",
     difficulty: 1,
     latest_score: 0,
+    avatar: "",
+    email: ""
   });
   const {
     loading,
     setLoading,
     name,
+    email,
     setName,
+    setToken,
     setLevel,
     setUserData,
+    setEmail,
     setScore,
+    setAvatar
   } = useUser();
   const { push } = useRouter();
 
@@ -43,7 +51,7 @@ export default function HomePage() {
       ...newUser,
       [e.target.name]: e.target.value,
     });
-    setUserData(newUser);
+    // setUserData(newUser);
   };
 
   const handleSubmit = () => {
@@ -51,12 +59,43 @@ export default function HomePage() {
     setName(newUser?.name);
     setScore(newUser?.latest_score);
     setLevel(newUser.difficulty);
+    
     if (name !== "") {
       push("/quiz");
       setLoading(false);
     }
   };
-
+  const handleGoogle = async() => {
+    setLoading(true);
+    const authResult = await handleGoogleAuth();
+    const {token, user, userScore}: any = authResult
+    
+    setToken(token)
+    setEmail(user?.email)
+    setName(user?.displayName);
+    setAvatar(user?.photoURL)
+    setScore(userScore);
+    setUserData({
+      name: user?.displayName,
+      difficulty: 1,
+      latest_score: userScore,
+      avatar: user?.photoURL,
+      email: user?.email
+    })
+    setNewUser({
+      name: user?.displayName,
+      difficulty: 1,
+      latest_score: userScore,
+      avatar: user?.photoURL,
+      email: user?.email
+    });
+    setLevel(1);
+    if (email) {
+      push("/quiz");
+      setLoading(false);
+    }
+  };
+  
   return (
     <Layout>
       <Seo templateTitle="Home | " />
@@ -105,6 +144,18 @@ export default function HomePage() {
                 <ImSpinner2 className="animate-spin" />
               ) : (
                 homeButtonText
+              )}
+            </Button>
+
+            <Button
+              variant="neutral"
+              className="mt-4 h-[45px] w-2/3"
+              onClick={()=>{handleGoogle()}}
+            >
+              {loading ? (
+                <ImSpinner2 className="animate-spin" />
+              ) : (
+                'Google'
               )}
             </Button>
           </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { GiTrophyCup } from "react-icons/gi";
 import { useRouter } from "next/router";
 import Layout from "@/components/layout/Layout";
@@ -10,6 +10,10 @@ import { SiProgress } from "react-icons/si";
 import { selectOptions } from "@/constant";
 import { GiTwoCoins } from "react-icons/gi";
 import CountUp from "react-countup";
+import Image from "next/image";
+import { getScoreUpdate } from "@/firebase";
+import { db } from "@/firebase";
+import { collection, onSnapshot } from "@firebase/firestore";
 
 type TopBarProps = {
   username: string | any;
@@ -20,16 +24,13 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
     setOpenQuizBoard(!openQuizBoard);
     setOpenResultBoard(false);
     setLoading(false);
-    // if (isReadInstructions && openResultBoard) {
 
-    // } else {
-    //   // setIsReadInstructions(true);
-    // }
   };
   const {
     setLevel,
     setUserData,
     userData,
+    setScore,
     setIsReadInstructions,
     isReadInstructions,
     setOpenQuizBoard,
@@ -38,6 +39,7 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
     setOpenResultBoard,
     score,
     level,
+    setBoardData,
     setLoading,
   } = useUser();
   const { push } = useRouter();
@@ -46,6 +48,7 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
     setScoree(score);
   }, [score]);
 
+  
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLevel(Number(e.target.value));
     setUserData({
@@ -54,9 +57,37 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
     });
   };
 
+  const getLeadersBoard = () => {
+    const userScoreDB = collection(db, "leadersBoard");
+    onSnapshot(userScoreDB, (querySnapshot) => {
+      setBoardData(
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          email:doc.data().email,
+          total: doc.data().total,
+        }))
+      );
+      getScoreUpdate(userData?.email).then(res=>{
+        setScore(res)
+      })
+
+    });
+  };
+  useEffect(() => {
+    getLeadersBoard()
+  }, []);
+
   return (
     <>
       <section className="md:bg-white_day md:-mr-12 md:flex md:flex-row md:items-center md:justify-between md:rounded-tl-3xl md:px-12 md:py-6 md:shadow-[0px_1px_0px_rgba(0,0,0,0.1)]">
+        <Image
+          src={userData?.avatar ? userData.avatar : "https://picsum.photos/200"}
+          priority
+          height={30}
+          width={30}
+          className=" ml-[-7px] h-8 w-8 rounded-full border border-white md:ml-[-20px] md:h-16 md:w-16"
+          alt="preview images"
+        />
         <p className="hidden md:block">
           {" "}
           <span className="mr-1 ">&#128075; </span> Hi{" "}
