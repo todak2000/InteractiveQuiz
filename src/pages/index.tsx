@@ -51,7 +51,6 @@ export default function HomePage() {
       ...newUser,
       [e.target.name]: e.target.value,
     });
-    // setUserData(newUser);
   };
 
   const handleSubmit = () => {
@@ -90,10 +89,7 @@ export default function HomePage() {
       email: user?.email
     });
     setLevel(1);
-    if (email) {
-      push("/quiz");
-      setLoading(false);
-    }
+    push("/quiz");
   };
   
   return (
@@ -113,7 +109,7 @@ export default function HomePage() {
           </div>
           <p className="header-text">{whiteHeaderText}</p>
           <div className="mt-4 flex w-full flex-col items-center justify-center">
-            <TextInput
+            {/* <TextInput
               variant="primary"
               className="w-2/3 md:w-1/2"
               name="name"
@@ -145,7 +141,7 @@ export default function HomePage() {
               ) : (
                 homeButtonText
               )}
-            </Button>
+            </Button> */}
 
             <Button
               variant="neutral"

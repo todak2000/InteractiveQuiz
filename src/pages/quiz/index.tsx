@@ -27,7 +27,7 @@ function Dashboard() {
     setIsReadInstructions(!isReadInstructions);
   };
   const position = useCallback(() => {
-    const position = sortFilterPosition(boardData).filter((item)=> item.email === userData?.email)[0].position
+    const position = sortFilterPosition(boardData)?.filter((item)=> item?.email === userData?.email)[0]?.position
     return position;
 }, [boardData]);
  
@@ -49,6 +49,7 @@ function Dashboard() {
   useEffect(() => {
     setOpenQuizBoard(false);
     setOpenResultBoard(false);
+    setIsReadInstructions(false)
 
   }, []);
 

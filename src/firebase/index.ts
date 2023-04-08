@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, onSnapshot, increment, setDoc, doc, query, where, getDocs, or } from "@firebase/firestore";
-import {getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getFirestore, collection, increment, setDoc, doc, query, where, getDocs, getDoc, updateDoc, arrayUnion} from "@firebase/firestore";
+import {getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -33,22 +33,26 @@ export const handleGoogleAuth = async (): Promise<{token: string, user: any, use
   try {
     const userCredentials = await signInWithPopup(auth, provider);
     const credential: any = GoogleAuthProvider.credentialFromResult(userCredentials);
-    const token = credential.accessToken;
+    // const token = credential.accessToken;
     const userScoreDB = collection(db, "leadersBoard");
     const scoreQuery = query(userScoreDB, where("email", "==", userCredentials.user?.email));
     const querySnapshot = await getDocs(scoreQuery);
     const user: any = userCredentials.user;
+    let token: any;
     if (user) {
       let userScore: number = 0;
       if (querySnapshot.docs.length > 0) {
         userScore = querySnapshot.docs[0].data().total;
+        token = querySnapshot.docs[0].id
       }
       else{
         let id = `id${Math.floor(Math.random() * 999999) + 1}gd`
+        token = id
         const newUserScoreDB = doc(db, "leadersBoard", id);
         await setDoc(newUserScoreDB, { total: increment(0), email: userCredentials.user?.email}, { merge: true })
         .then((res:any)=>console.log("new user added to db leaderboard"))
       }
+      console.log(token, user, userScore, 'sdsds')
       return {token, user, userScore};
     }
     return;
@@ -57,19 +61,55 @@ export const handleGoogleAuth = async (): Promise<{token: string, user: any, use
   }
 };
 
-export const sendUserScore = async (email:string, score:number) => {
+export const handleGoogleOut = async (): Promise<void> => { 
   try {
-    const boardRef = doc(db, "leadersBoard", email);
+    const logout = await signOut(auth);
+    console.log(logout)
+    return logout
+  } catch(err) {
+    console.log(err);
+  }
+};
+
+export const sendUserScore = async (token:string, score:number) => {
+  try {
+    const boardRef = doc(db, "leadersBoard", token);
     const res = await setDoc(boardRef, 
       { 
-        total: increment(score) ,
-        email: email,
+        total: increment(score)
       }, 
       { merge: true }
     );
     return res
   } catch (error) {
-    console.log(error, "device error");
+    console.log(error, "update user score");
+  }
+};
+
+// accept Challenge
+export const acceptChallenge = async (token: string, challengeId:string) => {
+  try {
+    let pullResult: any = await handleSearchChallengeBoard(challengeId)
+    console.log(pullResult[0].noOfPlayers,'sds')
+    if (pullResult[0].playersArray.length < pullResult[0].noOfPlayers) {
+      pullResult[0].playersArray.push({
+        playerId: token,
+        score: 0,
+        isPlayed: false
+      });
+      const boardRef = doc(db, "challengeBoard", challengeId);
+      const res = await setDoc(boardRef, 
+        {
+        playersArray: pullResult[0].playersArray
+      },
+      { merge: true }
+      );
+      
+      return res
+    }
+    
+  } catch (error) {
+    console.log(error, "error");
   }
 };
 
@@ -96,12 +136,67 @@ export const handleSearchLeaderBoard = async (queryItem: string|number)=> {
   }
 };
 
+// search challenge board
+export const handleSearchChallengeBoard = async (queryItem: string|any)=> { 
+  try {
+    const boardDB = doc(db, "challengeBoard", queryItem);
+    const querySnapshot: any = await getDoc(boardDB)
+    const searchResultArray =[]
+      searchResultArray.push(
+        {
+          id: querySnapshot.id,
+          creatorId: querySnapshot?.data().creatorId, 
+        levelOfDifficulty: querySnapshot?.data().levelOfDifficulty, 
+        noOfPlayers: querySnapshot?.data().noOfPlayers, 
+        noOfQuestions: querySnapshot?.data().noOfQuestions, 
+        stake: querySnapshot?.data().stake,
+        isClosed: querySnapshot?.data().isClosed,
+        playersArray: querySnapshot?.data().playersArray
+        }
+      );
+    // }
+    return searchResultArray || []
+
+  } catch(err) {
+    console.log(err);
+  }
+};
+
 export const getScoreUpdate = async (email:any) => { 
   try {
     const userScoreDB = collection(db, "leadersBoard");
     const scoreQuery = query(userScoreDB, where("email", "==", email));
     const querySnapshot = await getDocs(scoreQuery); 
     return querySnapshot.docs[0].data().total;
+  } catch(err) {
+    console.log(err);
+  }
+};
+
+
+// create challenge
+export const createQuizChallenge = async (creatorId: string, levelOfDifficulty: string, noOfPlayers: string, noOfQuestions: string, stake: string): Promise<void> => { 
+  try {
+ 
+    let id = `chall${Math.floor(Math.random() * 999999) + 1}ge`
+    const newChallenge = doc(db, "challengeBoard", id);
+    await setDoc(newChallenge, { 
+        creatorId: creatorId, 
+        levelOfDifficulty: levelOfDifficulty, 
+        noOfPlayers: Number(noOfPlayers), 
+        noOfQuestions: Number(noOfQuestions), 
+        stake: Number(stake),
+        isClosed: false,
+        playersArray: [{
+          playerId: creatorId,
+          score: 0,
+          isPlayed: false
+        }]
+      },
+      { merge: true }
+    )
+    .then(()=>console.log("challenge added to db leaderboard"))
+    return;
   } catch(err) {
     console.log(err);
   }

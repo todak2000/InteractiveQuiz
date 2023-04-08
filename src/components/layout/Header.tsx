@@ -13,6 +13,7 @@ function Header() {
   const links = [
     { id: 1, href: `/quiz`, label: "Quizboard" }, 
     { id: 2, href: `/board`, label: "Leadersboard" }, 
+    { id: 3, href: `/challenge`, label: "Challengeboard" }, 
 ];
   return (
     <>

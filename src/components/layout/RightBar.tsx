@@ -32,8 +32,8 @@ function RightBar() {
   };
   return (
     <>
-      <section className="absolute top-0 right-0 z-10 hidden h-[100vh] w-full bg-black opacity-30 md:block"></section>
-      <div className="absolute  top-0 right-0 z-20 h-[100vh] w-full bg-white px-2 py-4 md:w-1/2">
+      <section className="absolute top-0 right-0 z-10 hidden md:h-[100vh] w-full bg-black opacity-30 md:block"></section>
+      <div className="absolute  top-0 right-0 z-20 h-full md:h-[100vh] w-full bg-white px-2 py-4 md:w-1/2">
         <div className="flex flex-col items-center justify-center">
           <GiBurningDot className="text-6xl text-brand_primary" />
           <p className="header-text text-brand_primary">{header}</p>
@@ -51,7 +51,7 @@ function RightBar() {
           })}
           <Button
             variant="submit"
-            className="mt-4 h-[45px] w-2/3"
+            className="my-4 h-[45px] w-2/3"
             onClick={handleStart}
           >
             {loading ? (
@@ -61,7 +61,7 @@ function RightBar() {
             )}
           </Button>
           <button
-            className=" absolute bottom-10 flex h-8 w-[130px] flex-row items-center justify-between bg-transparent px-4 text-[10px] leading-[14px] text-[#414141] disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
+            className=" flex h-8 w-[130px] flex-row items-center justify-between bg-transparent px-4 text-[10px] leading-[14px] text-[#414141] disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
             onClick={() => {
               handleInstructions();
             }}

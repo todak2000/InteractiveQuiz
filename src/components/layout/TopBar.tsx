@@ -14,41 +14,41 @@ import Image from "next/image";
 import { getScoreUpdate } from "@/firebase";
 import { db } from "@/firebase";
 import { collection, onSnapshot } from "@firebase/firestore";
+import { handleGoogleOut } from "@/firebase";
 
 type TopBarProps = {
   username: string | any;
 };
 
 const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
-  const handleOpen = () => {
-    setOpenQuizBoard(!openQuizBoard);
-    setOpenResultBoard(false);
-    setLoading(false);
-
-  };
+  const { push, pathname} = useRouter();
   const {
     setLevel,
     setUserData,
     userData,
     setScore,
-    setIsReadInstructions,
-    isReadInstructions,
     setOpenQuizBoard,
     openQuizBoard,
     openResultBoard,
     setOpenResultBoard,
     score,
     level,
+  setChallengeData,
     setBoardData,
     setLoading,
   } = useUser();
-  const { push } = useRouter();
+ 
   const [scoree, setScoree] = useState(score);
   useEffect(() => {
     setScoree(score);
   }, [score]);
 
-  
+  const handleOpen = () => {
+    setOpenQuizBoard(!openQuizBoard);
+    setOpenResultBoard(false);
+    setLoading(false);
+
+  };
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLevel(Number(e.target.value));
     setUserData({
@@ -56,6 +56,30 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
       [e.target.name]: e.target.value,
     });
   };
+const handleLogOut = ()=>{
+  handleGoogleOut().then(()=>{
+    push("/")
+    localStorage.clear();
+  })
+}
+const getChallengeBoard = () => {
+  const challengeBoard = collection(db, "challengeBoard");
+  onSnapshot(challengeBoard, (querySnapshot) => {
+    setChallengeData(
+      querySnapshot.docs.filter((doc)=>doc.data().isClosed == false).map((doc) => ({
+        id: doc.id,
+        creatorId: doc.data().creatorId, 
+        levelOfDifficulty: doc.data().levelOfDifficulty, 
+        noOfPlayers: doc.data().noOfPlayers, 
+        noOfQuestions: doc.data().noOfQuestions, 
+        stake: doc.data().stake,
+        isClosed: doc.data().isClosed,
+        playersArray: doc.data().playersArray
+      }))
+    );
+
+  });
+};
 
   const getLeadersBoard = () => {
     const userScoreDB = collection(db, "leadersBoard");
@@ -75,17 +99,18 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
   };
   useEffect(() => {
     getLeadersBoard()
+    getChallengeBoard()
   }, []);
 
   return (
     <>
       <section className="md:bg-white_day md:-mr-12 md:flex md:flex-row md:items-center md:justify-between md:rounded-tl-3xl md:px-12 md:py-6 md:shadow-[0px_1px_0px_rgba(0,0,0,0.1)]">
         <Image
-          src={userData?.avatar ? userData.avatar : "https://picsum.photos/200"}
+          src={userData?.avatar ? `${userData?.avatar}` : "https://picsum.photos/200"}
           priority
           height={30}
           width={30}
-          className=" ml-[-7px] h-8 w-8 rounded-full border border-white md:ml-[-20px] md:h-16 md:w-16"
+          className="h-8 w-8 rounded-full md:h-16 md:w-16 hidden md:flex"
           alt="preview images"
         />
         <p className="hidden md:block">
@@ -138,7 +163,7 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
             onClick={() => {
               handleOpen();
             }}
-            disabled={openResultBoard ? true : false}
+            disabled={openResultBoard || pathname !=='/quiz' ? true : false}
           >
             {openQuizBoard && !openResultBoard ? (
               <>
@@ -154,7 +179,7 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
           </button>
           <span
             className="ml-1 hidden cursor-pointer md:ml-10 md:flex"
-            onClick={() => push("/")}
+            onClick={() => handleLogOut()}
           >
             <RiLogoutCircleLine className="text-red-500" />
           </span>

@@ -3,6 +3,8 @@ import React from "react";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { RxDashboard } from "react-icons/rx";
 import { MdLeaderboard } from "react-icons/md";
+import {BsClipboardData} from 'react-icons/bs'
+import Link from "next/link";
 type HeaderButtonProps = {
   href: string;
   text: string;
@@ -19,34 +21,24 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({
   activeBg,
   activeText,
   inactiveBg,
-  onClick,
-  setConversionOpen,
 }) => {
-  const { pathname, push } = useRouter();
-
-  const handleLink = (link: string) => {
-    push(link);
-  };
+  const { pathname } = useRouter();
 
   const classname =
     href === pathname.split("/quiz").pop() ||
     href === pathname.split("/board").pop()
       ? `${activeBg} rounded-l-lg w-full h-12 ${activeText} flex flex-row text-sm items-center pl-8 my-3`
-      : `${inactiveBg} rounded-l-lg w-full h-12 text-white flex flex-row items-center pl-8 my-3 text-sm`;
+      : `${inactiveBg} rounded-l-lg w-full h-12 text-white flex flex-row items-center pl-8 my-3 text-sm hover:text-blue-300`;
 
   return (
-    <button
-      onClick={() => {
-        handleLink(href);
-      }}
-      className={classname}
-    >
+    <Link href={href} className={classname}>
       {text === "Quizboard" && <RxDashboard size={25} className="mr-4" />}
-      {text === "Leadersboard" && <MdLeaderboard size={25} className="mr-4" />}
-
-      {text === "Logout" && <RiLogoutCircleLine size={25} className="mr-2" />}
-      {text}
-    </button>
+          {text === "Leadersboard" && <MdLeaderboard size={25} className="mr-4" />}
+          {text === "Challengeboard" && <BsClipboardData size={25} className="mr-4" />}
+          
+          {text === "Logout" && <RiLogoutCircleLine size={25} className="mr-2" />}
+          {text}
+    </Link>
   );
 };
 

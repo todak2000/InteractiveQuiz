@@ -19,7 +19,8 @@ function MobileHeader({ alt, image, handleLogOut }: MobileHeaderProps) {
   const links = [
     { id: 1, href: `/quiz`, label: "Quizboard" },
     { id: 2, href: `/board`, label: "Leadersboard" }, 
-    { id: 3, href: "/", label: "Logout" },
+    { id: 3, href: `/challenge`, label: "Challengeboard" }, 
+    { id: 4, href: "/", label: "Logout" },
   ];
   return (
     <header className="xs:bg-white_day lg:hiden flex-row justify-between p-3 shadow-[0px_1px_4px_rgba(0,0,0,0.5)] xs:flex md:hidden">

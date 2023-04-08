@@ -29,3 +29,17 @@ export const sortFilterPosition = (arr: object[]) => {
         }
     });
 }
+
+export const checkPlayerId = (arr: any[], playerId:string) => {
+    let isPlayed: boolean = false;
+    let isPlayer:boolean = false;
+    // use the filter method to create a new array of objects with matching playerIds
+    const filteredArr = arr?.filter((obj) => obj?.playerId === playerId);
+    // if the new array is not empty, return true
+    if (filteredArr?.length > 0) {
+      isPlayer =  true;
+      isPlayed = filteredArr[0].isPlayed;
+    }
+    // if the new array is empty, return false
+    return {isPlayer, isPlayed};
+  };

@@ -8,6 +8,7 @@ import clsxm from "@/lib/clsxm";
 enum ButtonVariant {
   "neutral",
   "submit",
+  "challenge"
 }
 
 enum ButtonSize {
@@ -78,6 +79,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
             variant === "submit" && [
               "h-[27px] w-[83px] rounded-sm bg-brand_primary text-white md:h-[54px] md:w-[209px]",
+              "border border-button_bg_color",
+              "hover:bg-white hover:text-brand_primary disabled:bg-[#f1f1f1] disabled:text-brand_primary",
+            ],
+            variant === "challenge" && [
+              "h-[20px] w-[83px] rounded-sm bg-brand_primary text-white md:h-[35px] md:w-[80px]",
               "border border-button_bg_color",
               "hover:bg-white hover:text-brand_primary disabled:bg-[#f1f1f1] disabled:text-brand_primary",
             ],

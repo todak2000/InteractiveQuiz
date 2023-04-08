@@ -7,6 +7,7 @@ import Card from "@/components/Card";
 import { GiTrophyCup } from "react-icons/gi";
 import { SlClose } from "react-icons/sl";
 import { ImSpinner2 } from "react-icons/im";
+import { socialMediaUrl } from "@/constant";
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -20,6 +21,7 @@ import {
   WhatsappIcon,
 } from "react-share";
 import useSound from "use-sound";
+import { sendUserScore } from "@/firebase"; 
 
 const QuizBoard: React.FC = () => {
   const {
@@ -29,6 +31,7 @@ const QuizBoard: React.FC = () => {
     setOpenQuizBoard,
     seconds,
     setScore,
+    token,
     openResultBoard,
     setOpenResultBoard,
     setLoading,
@@ -67,7 +70,7 @@ const QuizBoard: React.FC = () => {
     }
   };
 
-  const handleNextQuestion = (gotAnswer: boolean) => {
+  const handleNextQuestion = async (gotAnswer: boolean) => {
     setCount(count + 1);
     setLoading(true);
     setIsNext(true);
@@ -75,6 +78,7 @@ const QuizBoard: React.FC = () => {
       setQuizScore(quizScore + 3);
       const newScore = Number(score) + 3;
       setScore(newScore);
+      await sendUserScore(token, 3) // sent to server
     }
     const oldIndex = questions[questionIndex]?.id;
 
@@ -132,32 +136,34 @@ const QuizBoard: React.FC = () => {
 
               <div className="my-10 flex w-full flex-row items-center justify-evenly md:w-1/2 ">
                 <FacebookShareButton
-                  url="https://i.postimg.cc/4xCdmLgm/1111.png"
-                  quote={`I just got a score of ${quizScore} playing this quiz`}
+                  url={socialMediaUrl}
+                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
+                  quote={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
                 >
                   <FacebookIcon size={32} round />
                 </FacebookShareButton>
                 <WhatsappShareButton
-                  url="https://i.postimg.cc/4xCdmLgm/1111.png"
-                  title={`I just got a score of ${quizScore} playing this quiz`}
+                  url={socialMediaUrl}
+                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
                   separator=":: "
                 >
                   <WhatsappIcon size={32} round />
                 </WhatsappShareButton>
-                <LinkedinShareButton url="https://i.postimg.cc/4xCdmLgm/1111.png">
+                <LinkedinShareButton 
+                  url={socialMediaUrl} 
+                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
+                >
                   <LinkedinIcon size={32} round />
                 </LinkedinShareButton>
                 <TwitterShareButton
-                  url="https://i.postimg.cc/4xCdmLgm/1111.png"
-                  title={`I just got a score of ${quizScore} playing this quiz`}
-                  className="Demo__some-network__share-button"
+                  url={socialMediaUrl}
+                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
                 >
                   <TwitterIcon size={32} round />
                 </TwitterShareButton>
                 <TelegramShareButton
-                  url="https://i.postimg.cc/4xCdmLgm/1111.png"
-                  title={`I just got a score of ${quizScore} playing this quiz`}
-                  className="Demo__some-network__share-button"
+                  url={socialMediaUrl}
+                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
                 >
                   <TelegramIcon size={32} round />
                 </TelegramShareButton>
@@ -165,7 +171,7 @@ const QuizBoard: React.FC = () => {
 
               <SlClose
                 size={25}
-                className=" absolute top-4 right-4 mb-4 text-red-400"
+                className=" absolute top-4 right-4 mb-4 text-red-400 cursor-pointer"
                 onClick={handleClose}
               />
             </div>

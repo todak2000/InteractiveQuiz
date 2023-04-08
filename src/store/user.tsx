@@ -11,6 +11,21 @@ export type UserProp = {
   email: string;
 };
 
+export type challengeProps = { 
+  id: string,
+  creatorId: string, 
+  levelOfDifficulty: string, 
+  noOfPlayers: number, 
+  noOfQuestions: number, 
+  stake: number,
+  isClosed: boolean,
+  playersArray: {
+    playerId: string,
+    score: number,
+    isPlayed: boolean
+  }[]
+}
+
 export type UserContextProps = {
   userData: UserProp | null;
   setUserData: React.Dispatch<React.SetStateAction<any>>;
@@ -38,6 +53,8 @@ export type UserContextProps = {
   setToken: React.Dispatch<React.SetStateAction<any>>;
   avatar: any;
   setAvatar: React.Dispatch<React.SetStateAction<any>>;
+  setChallengeData:React.Dispatch<React.SetStateAction<any[]>>
+  challengeData: challengeProps[],
 };
 
 const UserContext = createContext<UserContextProps>({
@@ -47,6 +64,8 @@ const UserContext = createContext<UserContextProps>({
   setLoading: () => null,
   setBoardData: ()=> null,
   boardData: [],
+  setChallengeData: ()=> null,
+  challengeData: [],
   name: "",
   setName: () => null,
   level: 1,
@@ -117,6 +136,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [openQuizBoard, setOpenQuizBoard] = useState(false);
   const [openResultBoard, setOpenResultBoard] = useState(false);
   const [boardData, setBoardData] = useState<any[]>([])
+  const [challengeData, setChallengeData] = useState<any[]>([])
   const [seconds, setSeconds] = useState(15);
   const [loading, setLoading] = useState(false);
 
@@ -165,7 +185,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setSeconds,
         isReadInstructions,
         setIsReadInstructions,
-        boardData, setBoardData
+        boardData, setBoardData,
+        challengeData, setChallengeData
       }}
     >
       {children}
