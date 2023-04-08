@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
 import { MdCancel } from "react-icons/md";
 import useSound from "use-sound";
@@ -29,7 +29,7 @@ const AnswerCard: React.FC<CardItem> = ({
   };
 
   const [play] = useSound("/sound/correct.mp3");
-  
+
   useEffect(() => {
     if (isPickedId !== null) {
       let a = answerArr.filter((ans) => ans.isAnswer === true);
@@ -38,16 +38,15 @@ const AnswerCard: React.FC<CardItem> = ({
   }, [isPickedId]);
 
   useEffect(() => {
-    setAnswerArr(randomizeAnswerArr(answerArray))
+    setAnswerArr(randomizeAnswerArr(answerArray));
     setCorrectAnsId(null);
     setIsPickedId(null);
   }, [answerArray]);
 
-
   const handleNext = () => {
     handleNextQuestion(correctAnsId === isPickedId);
   };
-  const randomizeAnswerArr = (arr:AnswerProps[])=> {
+  const randomizeAnswerArr = (arr: AnswerProps[]) => {
     let randomizedArr = [];
     let answerArrCopy = [...arr];
     while (answerArrCopy.length > 0) {
@@ -56,9 +55,7 @@ const AnswerCard: React.FC<CardItem> = ({
       answerArrCopy.splice(randIndex, 1);
     }
     return randomizedArr;
-  }
-
-
+  };
 
   return (
     <div className="flex flex-col items-center justify-center rounded-lg bg-white p-4 md:h-[50vh]">
@@ -80,8 +77,8 @@ const AnswerCard: React.FC<CardItem> = ({
             key={id}
             className={`${
               isPickedId !== null && correctAnsId === id && isPickedId === id
-                ? "mt-4 flex h-[45px] w-full md:w-2/3 flex-row items-center justify-center rounded-lg bg-brand_primary text-white"
-                : " mt-4 flex h-[45px] w-full md:w-2/3 flex-row items-center justify-center rounded-lg border-[1px] border-brand_primary bg-white text-brand_primary"
+                ? "mt-4 flex h-[45px] w-full flex-row items-center justify-center rounded-lg bg-brand_primary text-white md:w-2/3"
+                : " mt-4 flex h-[45px] w-full flex-row items-center justify-center rounded-lg border-[1px] border-brand_primary bg-white text-brand_primary md:w-2/3"
             }`}
             disabled={isPickedId !== null ? true : false}
             onClick={() => {

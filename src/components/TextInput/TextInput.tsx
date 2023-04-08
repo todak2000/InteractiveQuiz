@@ -1,18 +1,21 @@
-import React from 'react'
+import React from "react";
+import { useUser } from "@/store/user";
 
 type Props = {
-  label: string
-  type: string
-  placeholder: string
-  name: string
-  inputBg: string
-  value: string
-  note?: string
-  options?: string[]
+  label: string;
+  type: string;
+  placeholder: string;
+  name: string;
+  inputBg: string;
+  value: string;
+  note?: string;
+  options?: string[];
   handleChange: (
-    e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
-  ) => void
-}
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => void;
+};
 const TextInput: React.FC<Props> = ({
   label,
   type,
@@ -24,19 +27,20 @@ const TextInput: React.FC<Props> = ({
   value,
   handleChange,
 }) => {
+  const { score } = useUser();
   return (
-    <div className='flex flex-col  w-full my-4'>
-      <p className=' text-[14px] leading-[18px] font-thin text-[#414141] mb-2'>
-        {label} <sup className='text-[#BD5A5A]'>*</sup>
+    <div className="my-4 flex  w-full flex-col">
+      <p className=" mb-2 text-[14px] font-thin leading-[18px] text-[#414141]">
+        {label} <sup className="text-[#BD5A5A]">*</sup>
       </p>
-      {type === 'select' ? (
+      {type === "select" ? (
         <select
-          className={`px-4 border-1 border-brand_primary ${inputBg} h-[45px] text-[#818181] w-full md:w-[100%] text-xs  font-thin rounded`}
+          className={`border-1 border-brand_primary px-4 ${inputBg} h-[45px] w-full rounded text-xs font-thin  text-[#818181] md:w-[100%]`}
           onChange={handleChange}
           name={name}
         >
           <option value="">Select Difficulty level&hellip;</option>
-          {options?.map((text,index) => {
+          {options?.map((text, index) => {
             return (
               <option key={index} value={text}>
                 {text}
@@ -50,35 +54,49 @@ const TextInput: React.FC<Props> = ({
           name={name}
           placeholder={placeholder}
           value={value}
-          // minLength={
-          //   name == 'stake' ? 100 :
-          //   name == 'noOfQuestions' ? 10 :
-          //   name == 'noOfPlayers' ? 2 : 99
-          // }
           onChange={handleChange}
-          className={`px-4 border-1 ${
-            value === '' ? "border-brand_primary":
-            name ==='stake' && (100 > Number(value) || 5000 < Number(value)) ? "border-[#FF395B]" :
-            name ==='noOfQuestions' && (10 > Number(value) || 30 < Number(value)) ? "border-[#FF395B]" :
-            name ==='noOfPlayers' && (2 > Number(value) || 5 < Number(value)) ? "border-[#FF395B]" :
-            
-            "border-brand_primary"
-          } ${inputBg} h-[45px] text-[#818181] w-full md:w-[100%] text-xs  font-thin rounded`}
+          className={`border-1 px-4 ${
+            value === ""
+              ? "border-brand_primary"
+              : name === "stake" &&
+                (100 > Number(value) || 5000 < Number(value))
+              ? "border-[#FF395B]"
+              : name === "noOfQuestions" &&
+                (10 > Number(value) || 30 < Number(value))
+              ? "border-[#FF395B]"
+              : name === "noOfPlayers" &&
+                (2 > Number(value) || 5 < Number(value))
+              ? "border-[#FF395B]"
+              : "border-brand_primary"
+          } ${inputBg} h-[45px] w-full rounded text-xs font-thin  text-[#818181] md:w-[100%]`}
         />
       )}
-      {note && <p 
-        className={`text-[10px] mt-1 leading-[13px] font-thin 
+      {note && (
+        <p
+          className={`mt-1 text-[10px] font-thin leading-[13px] 
         ${
-          value === '' ? "text=[#414141]":
-          name ==='stake' && (100 > Number(value) || 5000 < Number(value)) ? "text-[#FF395B]" :
-          name ==='noOfQuestions' && (10 > Number(value) || 30 < Number(value)) ? "text-[#FF395B]" :
-          name ==='noOfPlayers' && (2 > Number(value) || 5 < Number(value)) ? "text-[#FF395B]" :
-          "text=[#414141]"
-        }`
-      }
-      >{note}</p>}
+          value === ""
+            ? "text=[#414141]"
+            : name === "stake" &&
+              (100 > Number(value) ||
+                5000 < Number(value) ||
+                score < Number(value))
+            ? "text-[#FF395B]"
+            : name === "noOfQuestions" &&
+              (10 > Number(value) || 30 < Number(value))
+            ? "text-[#FF395B]"
+            : name === "noOfPlayers" && (2 > Number(value) || 5 < Number(value))
+            ? "text-[#FF395B]"
+            : "text=[#414141]"
+        }`}
+        >
+          {name === "stake" && score < Number(value)
+            ? "You have exceeded your balance"
+            : note}
+        </p>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default React.memo(TextInput);

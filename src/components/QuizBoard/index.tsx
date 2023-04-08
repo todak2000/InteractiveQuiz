@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import QuestionCard from "../questionCard";
 import { questionsArray } from "@/constant";
 import AnswerCard from "../answerCard";
@@ -8,6 +8,7 @@ import { GiTrophyCup } from "react-icons/gi";
 import { SlClose } from "react-icons/sl";
 import { ImSpinner2 } from "react-icons/im";
 import { socialMediaUrl } from "@/constant";
+import { useRouter } from "next/router";
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -21,9 +22,17 @@ import {
   WhatsappIcon,
 } from "react-share";
 import useSound from "use-sound";
-import { sendUserScore } from "@/firebase"; 
+import {
+  sendUserScore,
+  handleSearchChallengeBoard,
+  updatePlayerChallengeScore,
+} from "@/firebase";
 
-const QuizBoard: React.FC = () => {
+type Props = {
+  setIsQuiz: React.Dispatch<React.SetStateAction<boolean>>;
+};
+const QuizBoard: React.FC<Props> = ({ setIsQuiz }) => {
+  const { push } = useRouter();
   const {
     score,
     userData,
@@ -33,7 +42,9 @@ const QuizBoard: React.FC = () => {
     setScore,
     token,
     openResultBoard,
+    setChallengeId,
     setOpenResultBoard,
+    challengeId,
     setLoading,
     loading,
   } = useUser();
@@ -41,6 +52,8 @@ const QuizBoard: React.FC = () => {
   const [quizScore, setQuizScore] = useState<number>(0);
   const [isNext, setIsNext] = useState(false);
   const [count, setCount] = useState(0);
+  const [noOfQuestions, setNoOfQuestions] = useState(9);
+  const [complete, setComplete] = useState(false);
   const [questionIndex, setQuestionIndex] = useState<number>(
     Math.floor(Math.random() * questions.length)
   );
@@ -54,7 +67,7 @@ const QuizBoard: React.FC = () => {
     const oldIndex = questions[questionIndex]?.id;
 
     const updatedQuestionsArray = removeQuestion(questions, oldIndex);
-    if (updatedQuestionsArray.length > 0 && count < 9) {
+    if (updatedQuestionsArray.length > 0 && count < noOfQuestions) {
       setQuestions(updatedQuestionsArray);
       setQuestionIndex(
         Math.floor(Math.random() * updatedQuestionsArray.length)
@@ -62,6 +75,11 @@ const QuizBoard: React.FC = () => {
 
       setLoading(false);
     } else {
+      if (challengeId && challengeId !== "") {
+        updatePlayerChallengeScore(token, challengeId, quizScore).then(() =>
+          console.log("challenge score updated")
+        );
+      }
       setTimeout(() => {
         play();
         setOpenResultBoard(true);
@@ -76,14 +94,16 @@ const QuizBoard: React.FC = () => {
     setIsNext(true);
     if (gotAnswer) {
       setQuizScore(quizScore + 3);
-      const newScore = Number(score) + 3;
-      setScore(newScore);
-      await sendUserScore(token, 3) // sent to server
+      if (!challengeId) {
+        const newScore = Number(score) + 3;
+        setScore(newScore);
+        await sendUserScore(token, 3); // sent to server
+      }
     }
     const oldIndex = questions[questionIndex]?.id;
 
     const updatedQuestionsArray = removeQuestion(questions, oldIndex);
-    if (updatedQuestionsArray.length > 0 && count < 9) {
+    if (updatedQuestionsArray.length > 0 && count < noOfQuestions) {
       setQuestions(updatedQuestionsArray);
       setQuestionIndex(
         Math.floor(Math.random() * updatedQuestionsArray.length)
@@ -93,22 +113,26 @@ const QuizBoard: React.FC = () => {
     } else {
       setTimeout(() => {
         play();
+        setComplete(true);
         setOpenResultBoard(true);
         setLoading(false);
       }, 2000);
     }
   };
 
-  const removeQuestion = useCallback(
-    (array: any[], id: number) => {
-      return array.filter((question) => question?.id !== id);;
-    },
-    [],
-  );
-  
+  const removeQuestion = useCallback((array: any[], id: number) => {
+    return array.filter((question) => question?.id !== id);
+  }, []);
+
   const handleClose = () => {
-    setOpenResultBoard(false);
-    setOpenQuizBoard(false);
+    if (challengeId && challengeId !== "") {
+      setChallengeId("");
+      setOpenResultBoard(false);
+      setIsQuiz(false);
+    } else {
+      setOpenResultBoard(false);
+      setOpenQuizBoard(false);
+    }
   };
 
   const cardData = [
@@ -119,6 +143,30 @@ const QuizBoard: React.FC = () => {
       icon: <GiTrophyCup className="text-6xl text-green-500" />,
     },
   ];
+
+  useEffect(() => {
+    if (challengeId && challengeId !== "") {
+      handleSearchChallengeBoard(challengeId).then((res: any) => {
+        setNoOfQuestions(res[0].noOfQuestions);
+        setSeconds(
+          res[0].levelOfDifficulty === "Easy"
+            ? 15
+            : res[0].levelOfDifficulty === "Medium"
+            ? 10
+            : res[0].levelOfDifficulty === "Hard"
+            ? 7
+            : 15
+        );
+      });
+    }
+  }, [challengeId]);
+  useEffect(() => {
+    if (challengeId && challengeId !== "" && complete) {
+      updatePlayerChallengeScore(token, challengeId, quizScore).then(() =>
+        console.log("challenge score updated")
+      );
+    }
+  }, [complete]);
 
   return (
     <div>
@@ -149,8 +197,8 @@ const QuizBoard: React.FC = () => {
                 >
                   <WhatsappIcon size={32} round />
                 </WhatsappShareButton>
-                <LinkedinShareButton 
-                  url={socialMediaUrl} 
+                <LinkedinShareButton
+                  url={socialMediaUrl}
                   title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
                 >
                   <LinkedinIcon size={32} round />
@@ -171,7 +219,7 @@ const QuizBoard: React.FC = () => {
 
               <SlClose
                 size={25}
-                className=" absolute top-4 right-4 mb-4 text-red-400 cursor-pointer"
+                className=" absolute top-4 right-4 mb-4 cursor-pointer text-red-400"
                 onClick={handleClose}
               />
             </div>
@@ -181,7 +229,7 @@ const QuizBoard: React.FC = () => {
                 question={questions[questionIndex]?.question}
                 quizScore={quizScore}
                 seconds={seconds}
-                len={10}
+                len={noOfQuestions}
                 count={count}
                 isNext={isNext}
                 setIsNext={setIsNext}

@@ -8,7 +8,7 @@ import clsxm from "@/lib/clsxm";
 enum ButtonVariant {
   "neutral",
   "submit",
-  "challenge"
+  "challenge",
 }
 
 enum ButtonSize {

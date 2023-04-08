@@ -2,220 +2,497 @@ import React, { useEffect, useState } from "react";
 import Mainboard from "@/pages/common/mainboard";
 import { useUser } from "@/store/user";
 import { HiCheckBadge, HiShare } from "react-icons/hi2";
-import { SlBadge } from "react-icons/sl";
-import {BsClipboardPlus} from 'react-icons/bs';
-import {RiSpaceShipLine} from 'react-icons/ri';
-import {MdIncompleteCircle} from 'react-icons/md'
+import { IoCloseCircleSharp } from "react-icons/io5";
+
+import { BsClipboardPlus } from "react-icons/bs";
+import { RiSpaceShipLine } from "react-icons/ri";
+import { BsClipboardData } from "react-icons/bs";
 import Button from "@/components/buttons/Button";
 import { ImSpinner2 } from "react-icons/im";
-// import { db } from "@/firebase";
-// import { collection, onSnapshot } from "@firebase/firestore";
+import QuizBoard from "@/components/QuizBoard";
+import { boardTableHeader } from "@/constant";
+import { useRouter } from "next/router";
 import Form from "@/components/Form";
 import { challengeTableHeader } from "@/constant";
-import { maskEmail } from "@/utils";
-import { handleSearchLeaderBoard } from "@/firebase";
-import { sortDataFunc, topThreeValues } from "@/utils";
+import { sortDataFunc } from "@/utils";
 import CountUp from "react-countup";
-import { getScoreUpdate } from "@/firebase";
 import { createChallengeFormState, createChallengeArray } from "@/constant";
 import SearchCard from "@/components/SearchCard";
-import { createQuizChallenge, handleSearchChallengeBoard, acceptChallenge } from "@/firebase";
+import {
+  createQuizChallenge,
+  handleSearchChallengeBoard,
+  acceptChallenge,
+} from "@/firebase";
 import { challengeProps } from "@/store/user";
 import { checkPlayerId } from "@/utils";
-// export type boardProps = {
-//   id: string; 
-//   email: string; 
-//   total: number;
-// }[]
+import Table from "@/components/Table";
+import { sortResultFunc } from "@/utils";
 
 function ChallengeBoard() {
   const challengeboardData = {
     title: "Challengeboard",
   };
-  const {
-    userData,
-    setScore,
-    loading,
-    setLoading,
-    token,
-    challengeData,
-    boardData, setBoardData
-  } = useUser();
-const [sortedData, setSortedData] = useState<challengeProps[]>([]);
+  const { score, setChallengeId, token, challengeData } = useUser();
+  const { push } = useRouter();
+  const [sortedData, setSortedData] = useState<challengeProps[]>([]);
+  const [sortedData2, setSortedData2] = useState<any>([]);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingShow, setIsLoadingShow] = useState<boolean>(false);
+  const [isLoadingAccept, setIsLoadingAccept] = useState<boolean>(false);
+  const [isQuiz, setIsQuiz] = useState<boolean>(false);
+  const [errMsg, setErrMsg] = useState<string>("");
+  const [showChallengeResult, setShowChallengeResult] =
+    useState<boolean>(false);
 
-const [isSearching, setIsSearching] = useState<boolean>(false)
-const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isCreate, setIsCreate] = useState<boolean>(false);
 
-const [isCreate, setIsCreate] = useState<boolean>(false)
-
-  const handleSearch  = async (e:React.FormEvent<HTMLInputElement> )=>{
+  const handleSearch = async (e: React.FormEvent<HTMLInputElement>) => {
     const value = (e.target as HTMLInputElement).value;
-    if (value !== '') {
-      setIsSearching(true)
-      const searchResult: any = await handleSearchChallengeBoard(value)
+    setErrMsg("");
+    if (value !== "") {
+      setIsSearching(true);
+      const searchResult: any = await handleSearchChallengeBoard(value);
       if (searchResult?.length > 0) {
-        setIsSearching(false)
-        setSortedData(searchResult)
+        setIsSearching(false);
+        setSortedData(searchResult);
+      } else {
+        setIsSearching(false);
+        setSortedData([]);
       }
-      else{
-        setIsSearching(false)
-        setSortedData([])
-      }
-      
+    } else {
+      setSortedData(challengeData);
     }
-    else{
-      setSortedData(challengeData)
+  };
+
+  const handleCreateChallenge = () => {
+    setErrMsg("");
+    setIsCreate(true);
+  };
+  const handleAcceptChallenge = async (id: string, stake: number) => {
+    setIsLoadingAccept(true);
+    if (score > stake) {
+      acceptChallenge(token, id).then(() => setIsLoadingAccept(false));
+    } else {
+      setIsLoading(true);
+      setErrMsg(
+        "Oops! you have insufficient coins. Play more quiz games to earn coins"
+      );
     }
-  }
+  };
+  const handleStartChallenge = (id: string) => {
+    setIsQuiz(true);
+    setChallengeId(id);
+    setErrMsg("");
+  };
+  const handleShowResult = async (data: any) => {
+    setIsLoadingShow(true);
+    setErrMsg("");
+    const res: any = sortResultFunc(data);
+    setSortedData2(res);
+    setShowChallengeResult(true);
+    setIsLoadingShow(false);
+  };
 
-  const handleCreateChallenge = ()=>{
-    
-    setIsCreate(true)
-  }
-  const handleAcceptChallenge = async (id: string)=>{
-    const res = await acceptChallenge(token, id)
-  }
-
-  const handleSubmit = async (form:any)=>{
-    form.creatorId = token
-    const res = await createQuizChallenge(
-      form.creatorId, 
-      form.levelOfDifficulty,
-      form.noOfPlayers, 
-      form.noOfQuestions,
-      form.stake
-    )
-
-  }
+  const handleSubmit = (form: any) => {
+    setIsLoading(true);
+    if (score > Number(form.stake)) {
+      form.creatorId = token;
+      createQuizChallenge(
+        form.creatorId,
+        form.levelOfDifficulty,
+        form.noOfPlayers,
+        form.noOfQuestions,
+        form.stake
+      ).then(() => {
+        setIsCreate(false);
+        setIsLoading(true);
+      });
+    } else {
+      setErrMsg(
+        "Oops! you have insufficient coins. Play more quiz games to earn coins"
+      );
+    }
+  };
   useEffect(() => {
-    const res: any = sortDataFunc(challengeData)
-    setSortedData(res)
-  }, [challengeData])
-  
+    const res: any = sortDataFunc(challengeData);
+    setErrMsg("");
+    setSortedData(res);
+  }, [challengeData]);
 
+  useEffect(() => {
+    if (!token) {
+      push("/");
+    }
+  }, []);
   return (
     <div>
       <Mainboard title={challengeboardData.title}>
-        <div >
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg pt-4 md:p-8 bg-white">
-            {isCreate ? 
-            <div className='flex flex-col justify-center items-center'>
-              <Form 
-              formState={createChallengeFormState}
-              formArray={createChallengeArray}
-              inputBg="#fff"
-              handleSubmit={handleSubmit}
-              handleClose={()=>setIsCreate(false)}
-            />
-            </div>
-            :
-            <>
-              <div className="px-4  pb-4 bg-white flex flex-col md:flex-row items-start md:justify-between md:items-center">
-                  <SearchCard handleSearch={handleSearch}/>
-                  <button
-                    className="flex h-8 w-[100px] mt-4 md:mt-0 flex-row items-center justify-between rounded-sm bg-brand_primary px-4 text-[10px] leading-[14px] text-white disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
-                    onClick={() => {
-                      handleCreateChallenge();
-                    }}
-                  >
-                    <BsClipboardPlus className="text-lg text-white md:mr-2" />
+        <div>
+          <div className="relative overflow-x-auto bg-white pt-4 shadow-md sm:rounded-lg md:p-8">
+            {isQuiz ? (
+              <QuizBoard setIsQuiz={setIsQuiz} />
+            ) : (
+              <>
+                {isCreate ? (
+                  <div className="flex flex-col items-center justify-center">
+                    {errMsg !== "" && (
+                      <p className="font-primary text-xs text-red-500">
+                        {" "}
+                        &#x1F615; {errMsg}
+                      </p>
+                    )}
+                    <Form
+                      formState={createChallengeFormState}
+                      formArray={createChallengeArray}
+                      inputBg="#fff"
+                      isLoading={isLoading}
+                      handleSubmit={handleSubmit}
+                      handleClose={() => setIsCreate(false)}
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex  flex-col items-start bg-white px-4 pb-4 md:flex-row md:items-center md:justify-between">
+                      <SearchCard handleSearch={handleSearch} />
+                      <button
+                        className="mt-4 flex h-8 w-[100px] flex-row items-center justify-between rounded-sm bg-brand_primary px-4 text-[10px] leading-[14px] text-white disabled:bg-[#a1a1a1] md:mt-0 md:h-12 md:w-auto md:rounded-xl md:text-sm"
+                        onClick={() => {
+                          handleCreateChallenge();
+                        }}
+                        disabled={score < 100}
+                      >
+                        <BsClipboardPlus className="text-lg text-white md:mr-2" />
                         Create New Challenge
-                  </button>
-              </div>
-              <table className="w-full text-sm text-left text-gray-500 ">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50  ">
-                  <tr>
-                    {challengeTableHeader.map(({id, text })=>{
-                      return (
-                          <th scope="col" className="px-6 py-3 font-secondary text-xs" key={id}>
-                              {text}
-                          </th>
-                      )
-                    })}
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    {isSearching ? 
-                    <div 
-                      className="absolute left-1/4 right-1/4 w-1/2 flex-col flex justify-center items-center">
-                        <ImSpinner2 className="animate-spin"/> 
+                      </button>
                     </div>
-                    :
-                    <>
-                    {sortedData?.length <= 0 && <div className="absolute left-1/4 right-1/ w-1/2 flex-col flex justify-center items-center"><span className='text-lg text-[#818181] font-secondary'>Oops! No Results</span></div>}
-                    {sortedData?.length > 0 && sortedData?.map(({id, stake, playersArray, creatorId, isClosed, levelOfDifficulty, noOfPlayers, noOfQuestions}) =>(
-                      <tr key={id}>
-                        <td className="px-6 py-4 font-primary ">
-                          <span className="text-xs">{id}</span>
-                        </td>
-                        <td className="px-6 py-4 font-primary text-xs">{levelOfDifficulty}</td>
-                        <td className="px-6 py-4 font-primary text-xs text-center"><CountUp end={noOfPlayers}/> </td>
-                        <td className="px-6 py-4 font-primary text-xs text-center">{noOfQuestions}</td>
-                        <td className="px-6 py-4 font-primary text-xs text-center">{stake}</td>
-                        <td className={`px-6 py-4 font-primary text-xs text-center ${noOfPlayers === playersArray?.length ?' ': 'animated-blink'}`}>{noOfPlayers === playersArray?.length  ?<RiSpaceShipLine className="text-2xl text-yellow-500 text-center mx-auto"/> : noOfPlayers - playersArray?.length}</td>
-                        <td className="px-6 py-4 font-primary text-xs flex flex-row items-center justify-center">
-                        {
-                        checkPlayerId(playersArray, token).isPlayer && playersArray?.length === noOfPlayers && !checkPlayerId(playersArray, token).isPlayed ?
-                          <Button
-                            variant="challenge"
-                            className=" h-[45px] w-[50px] text-xs"
-                            // onClick={()=>{handleAcceptChallenge(id)}}
-                          >
-                            {isLoading ? (
-                              <ImSpinner2 className="animate-spin" />
-                            ) : (
-                              "Start"
-                            )}
-                          </Button>
-                        :
-                        checkPlayerId(playersArray, token).isPlayer && playersArray?.length === noOfPlayers && checkPlayerId(playersArray, token).isPlayed ?
-                          <Button
-                            variant="challenge"
-                            className=" h-[45px] w-[50px] text-xs"
-                            // onClick={()=>{handleAcceptChallenge(id)}}
-                          >
-                            {isLoading ? (
-                              <ImSpinner2 className="animate-spin" />
-                            ) : (
-                              "Results"
-                            )}
-                          </Button>
-                        :
-                        checkPlayerId(playersArray, token).isPlayer && playersArray?.length < noOfPlayers && !checkPlayerId(playersArray, token).isPlayed ?
-                        <>
-                        <HiCheckBadge className="text-2xl text-green-500"/>
-                        </>
-                        :
-                        !checkPlayerId(playersArray, token).isPlayer && playersArray?.length < noOfPlayers && !checkPlayerId(playersArray, token).isPlayed? 
-                        <Button
-                          variant="challenge"
-                          className=" h-[45px] w-[50px] text-xs"
-                          onClick={()=>{handleAcceptChallenge(id)}}
-                        >
-                          {isLoading ? (
+                    {errMsg !== "" && (
+                      <p className="text-center font-primary text-xs text-red-500">
+                        {" "}
+                        &#x1F615; {errMsg}
+                      </p>
+                    )}
+                    <table className="w-full text-left text-sm text-gray-500 ">
+                      <thead className="bg-gray-50 text-xs uppercase text-gray-700  ">
+                        <tr>
+                          {challengeTableHeader.map(({ id, text }) => {
+                            return (
+                              <th
+                                scope="col"
+                                className="px-6 py-3 font-secondary text-xs"
+                                key={id}
+                              >
+                                {text}
+                              </th>
+                            );
+                          })}
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody
+                        className={`${
+                          sortedData?.length <= 0 ? "h-[200px]" : ""
+                        }`}
+                      >
+                        {isSearching ? (
+                          <div className="absolute left-1/4 right-1/4 flex w-1/2 flex-col items-center justify-center">
                             <ImSpinner2 className="animate-spin" />
-                          ) : (
-                            "Accept"
-                          )}
-                        </Button>:
-                        ''
-                        }
-                        </td> 
-                        <td>
-                          <HiShare className='cursor-pointer text-[#818181]'/>
-                        </td>
-                      </tr>
-                    ))}
-                    </>
-                    }
-                    
-                  </tbody>
-              </table>
+                          </div>
+                        ) : (
+                          <>
+                            {sortedData?.length <= 0 && (
+                              <div className="right-1/ absolute left-1/4 mt-10 flex w-1/2 flex-col items-center justify-center bg-white">
+                                <BsClipboardData className="my-4 text-3xl text-[#414141]" />
+                                <span className="h-12 font-secondary text-sm text-[#818181]">
+                                  Oops! No Challenge. Start One
+                                </span>
+                              </div>
+                            )}
+                            {sortedData?.length > 0 &&
+                              sortedData?.map(
+                                (
+                                  {
+                                    id,
+                                    stake,
+                                    playersArray,
+                                    creatorId,
+                                    isClosed,
+                                    levelOfDifficulty,
+                                    noOfPlayers,
+                                    noOfQuestions,
+                                  },
+                                  index
+                                ) => (
+                                  <>
+                                    {playersArray.filter(
+                                      (player: any) => player.playerId === token
+                                    ).length == 1 ? (
+                                      <tr key={id}>
+                                        <td className="px-6 py-4 font-primary ">
+                                          <span className="text-xs">{id}</span>
+                                        </td>
+                                        <td className="px-6 py-4 font-primary text-xs">
+                                          {levelOfDifficulty}
+                                        </td>
+                                        <td className="px-6 py-4 text-center font-primary text-xs">
+                                          <CountUp end={noOfPlayers} />{" "}
+                                        </td>
+                                        <td className="px-6 py-4 text-center font-primary text-xs">
+                                          {noOfQuestions}{" "}
+                                        </td>
+                                        <td className="px-6 py-4 text-center font-primary text-xs">
+                                          {stake}
+                                        </td>
+                                        <td
+                                          className={`px-6 py-4 text-center font-primary text-xs ${
+                                            noOfPlayers === playersArray?.length
+                                              ? " "
+                                              : "animated-blink"
+                                          }`}
+                                        >
+                                          {noOfPlayers ===
+                                          playersArray?.length ? (
+                                            <RiSpaceShipLine className="mx-auto text-center text-2xl text-yellow-500" />
+                                          ) : (
+                                            noOfPlayers - playersArray?.length
+                                          )}
+                                        </td>
+                                        <td className="flex flex-row items-center justify-center px-6 py-4 font-primary text-xs">
+                                          {checkPlayerId(playersArray, token)
+                                            .isPlayer &&
+                                          playersArray?.length ===
+                                            noOfPlayers &&
+                                          !checkPlayerId(playersArray, token)
+                                            .isPlayed ? (
+                                            <Button
+                                              variant="challenge"
+                                              className=" h-[45px] w-[50px] text-xs"
+                                              onClick={() => {
+                                                handleStartChallenge(id);
+                                              }}
+                                            >
+                                              Start
+                                            </Button>
+                                          ) : checkPlayerId(playersArray, token)
+                                              .isPlayer &&
+                                            playersArray?.length ===
+                                              noOfPlayers &&
+                                            checkPlayerId(playersArray, token)
+                                              .isPlayed ? (
+                                            <Button
+                                              variant="challenge"
+                                              className=" h-[45px] w-[50px] text-xs"
+                                              onClick={() => {
+                                                handleShowResult(playersArray);
+                                              }}
+                                            >
+                                              {isLoadingShow ? (
+                                                <ImSpinner2 className="animate-spin" />
+                                              ) : (
+                                                "Results"
+                                              )}
+                                            </Button>
+                                          ) : checkPlayerId(playersArray, token)
+                                              .isPlayer &&
+                                            playersArray?.length <
+                                              noOfPlayers &&
+                                            !checkPlayerId(playersArray, token)
+                                              .isPlayed ? (
+                                            <>
+                                              <HiCheckBadge className="text-2xl text-green-500" />
+                                            </>
+                                          ) : !checkPlayerId(
+                                              playersArray,
+                                              token
+                                            ).isPlayer &&
+                                            playersArray?.length <
+                                              noOfPlayers &&
+                                            !checkPlayerId(playersArray, token)
+                                              .isPlayed ? (
+                                            <Button
+                                              variant="challenge"
+                                              className=" h-[45px] w-[50px] text-xs"
+                                              onClick={() => {
+                                                handleAcceptChallenge(
+                                                  id,
+                                                  stake
+                                                );
+                                              }}
+                                              disabled={score < stake}
+                                            >
+                                              {isLoadingAccept ? (
+                                                <ImSpinner2 className="animate-spin" />
+                                              ) : score < stake ? (
+                                                "low fund"
+                                              ) : (
+                                                "Accept"
+                                              )}
+                                            </Button>
+                                          ) : (
+                                            ""
+                                          )}
+                                        </td>
+                                        <td>
+                                          {checkPlayerId(playersArray, token)
+                                            .isPlayer &&
+                                            playersArray?.length <
+                                              noOfPlayers &&
+                                            !checkPlayerId(playersArray, token)
+                                              .isPlayed && (
+                                              <HiShare className="cursor-pointer text-[#818181]" />
+                                            )}
+                                        </td>
+                                      </tr>
+                                    ) : !isClosed ? (
+                                      <tr key={id}>
+                                        <td className="px-6 py-4 font-primary ">
+                                          <span className="text-xs">{id}</span>
+                                        </td>
+                                        <td className="px-6 py-4 font-primary text-xs">
+                                          {levelOfDifficulty}
+                                        </td>
+                                        <td className="px-6 py-4 text-center font-primary text-xs">
+                                          <CountUp end={noOfPlayers} />{" "}
+                                        </td>
+                                        <td className="px-6 py-4 text-center font-primary text-xs">
+                                          {noOfQuestions}{" "}
+                                        </td>
+                                        <td className="px-6 py-4 text-center font-primary text-xs">
+                                          {stake}
+                                        </td>
+                                        <td
+                                          className={`px-6 py-4 text-center font-primary text-xs ${
+                                            noOfPlayers === playersArray?.length
+                                              ? " "
+                                              : "animated-blink"
+                                          }`}
+                                        >
+                                          {noOfPlayers ===
+                                          playersArray?.length ? (
+                                            <RiSpaceShipLine className="mx-auto text-center text-2xl text-yellow-500" />
+                                          ) : (
+                                            noOfPlayers - playersArray?.length
+                                          )}
+                                        </td>
+                                        <td className="flex flex-row items-center justify-center px-6 py-4 font-primary text-xs">
+                                          {checkPlayerId(playersArray, token)
+                                            .isPlayer &&
+                                          playersArray?.length ===
+                                            noOfPlayers &&
+                                          !checkPlayerId(playersArray, token)
+                                            .isPlayed ? (
+                                            <Button
+                                              variant="challenge"
+                                              className=" h-[45px] w-[50px] text-xs"
+                                              onClick={() => {
+                                                handleStartChallenge(id);
+                                              }}
+                                            >
+                                              Start
+                                            </Button>
+                                          ) : checkPlayerId(playersArray, token)
+                                              .isPlayer &&
+                                            playersArray?.length ===
+                                              noOfPlayers &&
+                                            checkPlayerId(playersArray, token)
+                                              .isPlayed ? (
+                                            <Button
+                                              variant="challenge"
+                                              className=" h-[45px] w-[50px] text-xs"
+                                              onClick={() => {
+                                                handleShowResult(playersArray);
+                                              }}
+                                            >
+                                              {isLoadingShow ? (
+                                                <ImSpinner2 className="animate-spin" />
+                                              ) : (
+                                                "Results"
+                                              )}
+                                            </Button>
+                                          ) : checkPlayerId(playersArray, token)
+                                              .isPlayer &&
+                                            playersArray?.length <
+                                              noOfPlayers &&
+                                            !checkPlayerId(playersArray, token)
+                                              .isPlayed ? (
+                                            <>
+                                              <HiCheckBadge className="text-2xl text-green-500" />
+                                            </>
+                                          ) : !checkPlayerId(
+                                              playersArray,
+                                              token
+                                            ).isPlayer &&
+                                            playersArray?.length <
+                                              noOfPlayers &&
+                                            !checkPlayerId(playersArray, token)
+                                              .isPlayed ? (
+                                            <Button
+                                              variant="challenge"
+                                              className=" h-[45px] w-[50px] text-xs"
+                                              onClick={() => {
+                                                handleAcceptChallenge(
+                                                  id,
+                                                  stake
+                                                );
+                                              }}
+                                              disabled={score < stake}
+                                            >
+                                              {isLoadingAccept ? (
+                                                <ImSpinner2 className="animate-spin" />
+                                              ) : score < stake ? (
+                                                "low fund"
+                                              ) : (
+                                                "Accept"
+                                              )}
+                                            </Button>
+                                          ) : (
+                                            ""
+                                          )}
+                                        </td>
+                                        <td>
+                                          {checkPlayerId(playersArray, token)
+                                            .isPlayer &&
+                                            playersArray?.length <
+                                              noOfPlayers &&
+                                            !checkPlayerId(playersArray, token)
+                                              .isPlayed && (
+                                              <HiShare className="cursor-pointer text-[#818181]" />
+                                            )}
+                                        </td>
+                                      </tr>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </>
+                                )
+                              )}
+                          </>
+                        )}
+                      </tbody>
+                    </table>
+                  </>
+                )}
               </>
-              }
+            )}
           </div>
-          
+          {showChallengeResult && (
+            <div className="absolute top-0 left-0 h-full bg-white  md:left-auto md:right-0 md:p-4">
+              <Table
+                tableHeader={boardTableHeader}
+                data={sortedData2}
+                topThree={[]}
+              />
+              <button
+                className=" mx-auto flex h-8 w-[130px] flex-row items-center justify-between bg-transparent px-4 text-[10px] leading-[14px] text-[#414141] disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
+                onClick={() => {
+                  setShowChallengeResult(false);
+                }}
+              >
+                <IoCloseCircleSharp className="text-lg text-[#414141] md:mr-2" />
+                Close
+              </button>
+            </div>
+          )}
         </div>
       </Mainboard>
     </div>

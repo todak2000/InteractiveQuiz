@@ -11,10 +11,10 @@ function Header() {
   }, []);
 
   const links = [
-    { id: 1, href: `/quiz`, label: "Quizboard" }, 
-    { id: 2, href: `/board`, label: "Leadersboard" }, 
-    { id: 3, href: `/challenge`, label: "Challengeboard" }, 
-];
+    { id: 1, href: `/quiz`, label: "Quizboard" },
+    { id: 2, href: `/board`, label: "Leadersboard" },
+    { id: 3, href: `/challenge`, label: "Challengeboard" },
+  ];
   return (
     <>
       <section className="sidebar hidden h-full min-h-[100vh] bg-brand_primary md:col-span-2 md:block md:pl-8  md:pr-12">

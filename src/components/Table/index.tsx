@@ -6,56 +6,61 @@ import { useUser } from "@/store/user";
 import CountUp from "react-countup";
 
 interface Props {
-    tableHeader: any[];
-    data: any[];
-    topThree?: any[];
+  tableHeader: any[];
+  data: any[];
+  topThree?: any[];
 }
 
-const Table: React.FC<Props> = ({ tableHeader, data, topThree=[]}) => {
-    const {
-        userData,
-      } = useUser();
+const Table: React.FC<Props> = ({ tableHeader, data, topThree = [] }) => {
+  const { userData, token } = useUser();
   return (
-    <table className="w-full text-sm text-left text-gray-500 ">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50  ">
+    <table className="w-full text-left text-sm text-gray-500 ">
+      <thead className="bg-gray-50 text-xs uppercase text-gray-700  ">
         <tr>
-        {tableHeader.map(({id, text })=>{
+          {tableHeader.map(({ id, text }) => {
             return (
-                <th scope="col" className="px-6 py-3 font-secondary text-xs" key={id}>
-                    {text}
-                </th>
-            )
-        })}
+              <th
+                scope="col"
+                className="px-6 py-3 font-secondary text-xs"
+                key={id}
+              >
+                {text}
+              </th>
+            );
+          })}
         </tr>
-        </thead>
-        <tbody>
-        {data.map(({id, email, total}, index) =>(
-            <tr key={id}>
+      </thead>
+      <tbody>
+        {data.map(({ id, email, total, isPlayed, score, playerId }, index) => (
+          <tr key={id}>
             <td className="px-6 py-4 font-primary ">
-                { total === topThree[0]?.total ?
-                <SlBadge className="text-2xl text-[#d4af37]"/>
-                :
-                total === topThree[1]?.total ?
-                <SlBadge className="text-2xl text-[#c0c0c0]"/>
-                :
-                total === topThree[2]?.total ?
-                <SlBadge className="text-2xl text-[#CD7F32]"/>
-                :
-                
-                <span className="text-xs">{index+1}</span>
-                
-            }
-                
+              {index === 0 ? (
+                <SlBadge className="text-2xl text-[#d4af37]" />
+              ) : (
+                <span className="text-xs">{index + 1}</span>
+              )}
             </td>
-            <td className="px-6 py-4 font-primary text-xs">{maskEmail(email)}</td>
-            <td className="px-6 py-4 font-primary text-xs"><CountUp end={total}/> </td>
-            {userData?.email === email &&
-            <td className="px-6 py-4 font-primary text-xs"><HiCheckBadge className="text-2xl text-green-500"/></td> 
-            }
-            </tr>
+            <td className="px-6 py-4 font-primary text-xs">
+              {email ? maskEmail(email) : playerId}
+            </td>
+            <td className="px-6 py-4 font-primary text-xs">
+              <CountUp end={total ? total : score} />{" "}
+            </td>
+
+            <td className="px-6 py-4 font-primary text-xs">
+              {isPlayed ? (
+                <HiCheckBadge className="text-2xl text-green-500" />
+              ) : (
+                // <HiCheckBadge className="text-2xl text-yellow-600"/>
+                ""
+              )}
+              {(userData?.email === email || token === playerId) && (
+                <span>You</span>
+              )}
+            </td>
+          </tr>
         ))}
-        
-        </tbody>
+      </tbody>
     </table>
   );
 };

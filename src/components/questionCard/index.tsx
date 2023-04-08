@@ -21,6 +21,7 @@ const QuestionCard: React.FC<CardItem> = ({
   question,
   quizScore,
   seconds,
+
   count,
   len,
 }) => {
@@ -40,7 +41,12 @@ const QuestionCard: React.FC<CardItem> = ({
           <CountUp end={scoree} />
         </p>
         <ProgressBar max={len} value={count} />
-        <CountdownTimer seconds={sec} isNext={isNext} setIsNext={setIsNext} />
+        <CountdownTimer
+          seconds={sec}
+          isNext={isNext}
+          setIsNext={setIsNext}
+          quizScore={quizScore}
+        />
       </div>
       <GiSpellBook className="mt-6 text-5xl text-brand_primary md:mt-0" />
       <p className="mt-4 text-center font-primary text-[20px] leading-[25px] md:text-[30px] md:leading-[42px]">

@@ -2,15 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "@/store/user";
 import { MdTimer } from "react-icons/md";
 import useSound from "use-sound";
-
+import { updatePlayerChallengeScore } from "@/firebase";
 interface Props {
   seconds: number;
   isNext: boolean;
   setIsNext: any;
+  quizScore: number;
 }
 
-const CountdownTimer: React.FC<Props> = ({ seconds, isNext, setIsNext }) => {
-  const { setLoading, setOpenResultBoard } = useUser();
+const CountdownTimer: React.FC<Props> = ({
+  seconds,
+  isNext,
+  setIsNext,
+  quizScore,
+}) => {
+  const { setLoading, setOpenResultBoard, challengeId, token } = useUser();
   const [play] = useSound("/sound/completed.mp3");
   const [timeLeft, setTimeLeft] = useState<number>(seconds);
 
@@ -29,6 +35,12 @@ const CountdownTimer: React.FC<Props> = ({ seconds, isNext, setIsNext }) => {
     }
 
     if (timeLeft === 0) {
+      if (challengeId) {
+        // console.log(challengeId, 'rfggg')
+        updatePlayerChallengeScore(token, challengeId, quizScore).then(() =>
+          console.log("challenge score updated")
+        );
+      }
       clearInterval(intervalId);
       setOpenResultBoard(true);
       setLoading(false);

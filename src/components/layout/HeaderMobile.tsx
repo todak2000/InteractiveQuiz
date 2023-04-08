@@ -18,8 +18,8 @@ function MobileHeader({ alt, image, handleLogOut }: MobileHeaderProps) {
   };
   const links = [
     { id: 1, href: `/quiz`, label: "Quizboard" },
-    { id: 2, href: `/board`, label: "Leadersboard" }, 
-    { id: 3, href: `/challenge`, label: "Challengeboard" }, 
+    { id: 2, href: `/board`, label: "Leadersboard" },
+    { id: 3, href: `/challenge`, label: "Challengeboard" },
     { id: 4, href: "/", label: "Logout" },
   ];
   return (

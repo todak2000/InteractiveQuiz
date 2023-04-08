@@ -5,49 +5,49 @@ export const homeButtonText = "Begin";
 export const socialMediaUrl = "https://interactivequiz.onrender.com";
 
 export const createChallengeFormState = {
-  creatorId:'',
-  noOfPlayers:'',
-  stake:'',
-  noOfQuestions:'',
-  levelOfDifficulty:'',
-}
+  creatorId: "",
+  noOfPlayers: "",
+  stake: "",
+  noOfQuestions: "",
+  levelOfDifficulty: "",
+};
 export const createChallengeArray = [
   {
     id: 1,
-    label: 'Level of Difficulty',
-    type: 'select',
-    name: 'levelOfDifficulty',
-    options: ['Easy', 'Medium', 'Hard'],
+    label: "Level of Difficulty",
+    type: "select",
+    name: "levelOfDifficulty",
+    options: ["Easy", "Medium", "Hard"],
     value: [1, 2, 3],
   },
   {
     id: 2,
-    label: 'Number of Questions',
-    type: 'number',
-    name: 'noOfQuestions',
-    placeholder: '10',
-    value: '',
-    note:'Min of 10 and Max of 30'
+    label: "Number of Questions",
+    type: "number",
+    name: "noOfQuestions",
+    placeholder: "10",
+    value: "",
+    note: "Min of 10 and Max of 30",
   },
   {
     id: 3,
-    label: 'Stake Amount',
-    name: 'stake',
-    type: 'text',
-    placeholder: '2000',
-    value: '',
-    note:'Min of 100 coins and Max of 5000 coins'
+    label: "Stake Amount",
+    name: "stake",
+    type: "text",
+    placeholder: "2000",
+    value: "",
+    note: "Min of 100 coins and Max of 5000 coins",
   },
   {
     id: 4,
-    label: 'Number of Players',
-    name: 'noOfPlayers',
-    type: 'number',
-    placeholder: '2',
-    value: '',
-    note:'Min of 2 and Max of 5'
+    label: "Number of Players",
+    name: "noOfPlayers",
+    type: "number",
+    placeholder: "2",
+    value: "",
+    note: "Min of 2 and Max of 5",
   },
-]
+];
 
 export const selectOptions = [
   {
@@ -807,7 +807,7 @@ export const questionsArray = [
   {
     id: 36,
     question:
-      "Wich term is often used to describe people who can speak more than three languages",
+      "Which term is often used to describe people who can speak more than three languages",
     answerArr: [
       {
         id: 1,
@@ -1004,44 +1004,44 @@ export const instructionButtonText = "Lets Get Started";
 export const boardTableHeader = [
   {
     id: 1,
-    text: 'Position'
+    text: "Position",
   },
   {
     id: 2,
-    text: 'User'
+    text: "User",
   },
   {
     id: 3,
-    text: 'Score'
+    text: "Score",
   },
-]
+];
 export const challengeTableHeader = [
   {
     id: 1,
-    text: 'ID'
+    text: "ID",
   },
   {
     id: 2,
-    text: 'Level'
+    text: "Level",
   },
   {
     id: 3,
-    text: 'Players'
+    text: "Players",
   },
   {
     id: 4,
-    text: 'Questions'
+    text: "Questions",
   },
   {
     id: 5,
-    text: 'Amount'
+    text: "Amount",
   },
   {
     id: 6,
-    text: 'Slots left'
+    text: "Slots left",
   },
   {
     id: 7,
-    text: 'Ongoing'
+    text: "Ongoing",
   },
-]
+];

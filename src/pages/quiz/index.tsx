@@ -7,7 +7,7 @@ import { GiTwoCoins } from "react-icons/gi";
 import QuizBoard from "@/components/QuizBoard";
 import { FaBookReader } from "react-icons/fa";
 import { sortFilterPosition } from "@/utils";
-
+import { useRouter } from "next/router";
 function Dashboard() {
   const dashboardData = {
     title: "Quizboard",
@@ -19,18 +19,24 @@ function Dashboard() {
     setIsReadInstructions,
     isReadInstructions,
     boardData,
+    token,
     userData,
+    challengeId,
+    setChallengeId,
     setOpenQuizBoard,
   } = useUser();
 
   const handleInstructions = () => {
     setIsReadInstructions(!isReadInstructions);
   };
+  const { push } = useRouter();
   const position = useCallback(() => {
-    const position = sortFilterPosition(boardData)?.filter((item)=> item?.email === userData?.email)[0]?.position
+    const position = sortFilterPosition(boardData)?.filter(
+      (item) => item?.email === userData?.email
+    )[0]?.position;
     return position;
-}, [boardData]);
- 
+  }, [boardData]);
+
   const cardData = [
     {
       id: 1,
@@ -49,8 +55,11 @@ function Dashboard() {
   useEffect(() => {
     setOpenQuizBoard(false);
     setOpenResultBoard(false);
-    setIsReadInstructions(false)
-
+    setIsReadInstructions(false);
+    setChallengeId("");
+    if (!token) {
+      push("/");
+    }
   }, []);
 
   return (
@@ -73,7 +82,7 @@ function Dashboard() {
               </button>
             </div>
           ) : (
-            <QuizBoard />
+            <QuizBoard setIsQuiz={() => null} />
           )}
         </div>
       </Mainboard>

@@ -11,28 +11,28 @@ export type UserProp = {
   email: string;
 };
 
-export type challengeProps = { 
-  id: string,
-  creatorId: string, 
-  levelOfDifficulty: string, 
-  noOfPlayers: number, 
-  noOfQuestions: number, 
-  stake: number,
-  isClosed: boolean,
+export type challengeProps = {
+  id: string;
+  creatorId: string;
+  levelOfDifficulty: string;
+  noOfPlayers: number;
+  noOfQuestions: number;
+  stake: number;
+  isClosed: boolean;
   playersArray: {
-    playerId: string,
-    score: number,
-    isPlayed: boolean
-  }[]
-}
+    playerId: string;
+    score: number;
+    isPlayed: boolean;
+  }[];
+};
 
 export type UserContextProps = {
   userData: UserProp | null;
   setUserData: React.Dispatch<React.SetStateAction<any>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  setBoardData:React.Dispatch<React.SetStateAction<any[]>>
-  boardData:  boardProps[];
+  setBoardData: React.Dispatch<React.SetStateAction<any[]>>;
+  boardData: boardProps[];
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
   level: number;
@@ -47,14 +47,16 @@ export type UserContextProps = {
   setSeconds: React.Dispatch<React.SetStateAction<number>>;
   isReadInstructions: boolean;
   setIsReadInstructions: React.Dispatch<React.SetStateAction<boolean>>;
-  email: any,
-  setEmail: React.Dispatch<React.SetStateAction<any>>,
+  email: any;
+  setEmail: React.Dispatch<React.SetStateAction<any>>;
   token: any;
   setToken: React.Dispatch<React.SetStateAction<any>>;
   avatar: any;
   setAvatar: React.Dispatch<React.SetStateAction<any>>;
-  setChallengeData:React.Dispatch<React.SetStateAction<any[]>>
-  challengeData: challengeProps[],
+  setChallengeData: React.Dispatch<React.SetStateAction<any[]>>;
+  challengeData: challengeProps[];
+  challengeId: any;
+  setChallengeId: React.Dispatch<React.SetStateAction<any>>;
 };
 
 const UserContext = createContext<UserContextProps>({
@@ -62,9 +64,9 @@ const UserContext = createContext<UserContextProps>({
   setUserData: () => null,
   loading: false,
   setLoading: () => null,
-  setBoardData: ()=> null,
+  setBoardData: () => null,
   boardData: [],
-  setChallengeData: ()=> null,
+  setChallengeData: () => null,
   challengeData: [],
   name: "",
   setName: () => null,
@@ -85,6 +87,8 @@ const UserContext = createContext<UserContextProps>({
   email: false,
   setEmail: () => null,
   avatar: false,
+  challengeId: "",
+  setChallengeId: () => null,
   setAvatar: () => null,
 });
 
@@ -106,15 +110,19 @@ let readObject = {
 };
 let tokenObject = {
   key: "token",
-  defaultValue: '',
+  defaultValue: "",
 };
 let emailObject = {
   key: "email",
-  defaultValue: '',
+  defaultValue: "",
 };
 let avatarObject = {
   key: "avatar",
-  defaultValue: '',
+  defaultValue: "",
+};
+let challengeIdObject = {
+  key: "chalengeId",
+  defaultValue: "",
 };
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [name, setName] = useLocalStorageState(userObject);
@@ -123,6 +131,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useLocalStorageState(tokenObject);
   const [email, setEmail] = useLocalStorageState(emailObject);
   const [avatar, setAvatar] = useLocalStorageState(avatarObject);
+  const [challengeId, setChallengeId] = useLocalStorageState(challengeIdObject);
   const [isReadInstructions, setIsReadInstructions] =
     useLocalStorageState(readObject);
 
@@ -131,16 +140,15 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     difficulty: level,
     latest_score: score,
     avatar: avatar,
-    email:email
+    email: email,
   });
   const [openQuizBoard, setOpenQuizBoard] = useState(false);
   const [openResultBoard, setOpenResultBoard] = useState(false);
-  const [boardData, setBoardData] = useState<any[]>([])
-  const [challengeData, setChallengeData] = useState<any[]>([])
+  const [boardData, setBoardData] = useState<any[]>([]);
+  const [challengeData, setChallengeData] = useState<any[]>([]);
   const [seconds, setSeconds] = useState(15);
   const [loading, setLoading] = useState(false);
 
-  
   useEffect(() => {
     switch (Number(level)) {
       case 1:
@@ -169,7 +177,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setToken,
         avatar,
         setAvatar,
-        email, 
+        email,
         setEmail,
         name,
         setName,
@@ -185,8 +193,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setSeconds,
         isReadInstructions,
         setIsReadInstructions,
-        boardData, setBoardData,
-        challengeData, setChallengeData
+        boardData,
+        setBoardData,
+        challengeData,
+        setChallengeData,
+        challengeId,
+        setChallengeId,
       }}
     >
       {children}

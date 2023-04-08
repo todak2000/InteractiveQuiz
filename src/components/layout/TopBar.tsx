@@ -21,7 +21,7 @@ type TopBarProps = {
 };
 
 const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
-  const { push, pathname} = useRouter();
+  const { push, pathname } = useRouter();
   const {
     setLevel,
     setUserData,
@@ -33,11 +33,11 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
     setOpenResultBoard,
     score,
     level,
-  setChallengeData,
+    setChallengeData,
     setBoardData,
     setLoading,
   } = useUser();
- 
+
   const [scoree, setScoree] = useState(score);
   useEffect(() => {
     setScoree(score);
@@ -47,7 +47,6 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
     setOpenQuizBoard(!openQuizBoard);
     setOpenResultBoard(false);
     setLoading(false);
-
   };
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLevel(Number(e.target.value));
@@ -56,30 +55,30 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
       [e.target.name]: e.target.value,
     });
   };
-const handleLogOut = ()=>{
-  handleGoogleOut().then(()=>{
-    push("/")
-    localStorage.clear();
-  })
-}
-const getChallengeBoard = () => {
-  const challengeBoard = collection(db, "challengeBoard");
-  onSnapshot(challengeBoard, (querySnapshot) => {
-    setChallengeData(
-      querySnapshot.docs.filter((doc)=>doc.data().isClosed == false).map((doc) => ({
-        id: doc.id,
-        creatorId: doc.data().creatorId, 
-        levelOfDifficulty: doc.data().levelOfDifficulty, 
-        noOfPlayers: doc.data().noOfPlayers, 
-        noOfQuestions: doc.data().noOfQuestions, 
-        stake: doc.data().stake,
-        isClosed: doc.data().isClosed,
-        playersArray: doc.data().playersArray
-      }))
-    );
-
-  });
-};
+  const handleLogOut = () => {
+    handleGoogleOut().then(() => {
+      push("/");
+      localStorage.clear();
+    });
+  };
+  const getChallengeBoard = () => {
+    const challengeBoard = collection(db, "challengeBoard");
+    onSnapshot(challengeBoard, (querySnapshot) => {
+      setChallengeData(
+        // querySnapshot.docs.filter((doc)=>doc.data().isClosed == false).map((doc) => ({
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          creatorId: doc.data().creatorId,
+          levelOfDifficulty: doc.data().levelOfDifficulty,
+          noOfPlayers: doc.data().noOfPlayers,
+          noOfQuestions: doc.data().noOfQuestions,
+          stake: doc.data().stake,
+          isClosed: doc.data().isClosed,
+          playersArray: doc.data().playersArray,
+        }))
+      );
+    });
+  };
 
   const getLeadersBoard = () => {
     const userScoreDB = collection(db, "leadersBoard");
@@ -87,30 +86,33 @@ const getChallengeBoard = () => {
       setBoardData(
         querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          email:doc.data().email,
+          email: doc.data().email,
           total: doc.data().total,
         }))
       );
-      getScoreUpdate(userData?.email).then(res=>{
-        setScore(res)
-      })
-
+      getScoreUpdate(userData?.email).then((res) => {
+        setScore(res);
+      });
     });
   };
   useEffect(() => {
-    getLeadersBoard()
-    getChallengeBoard()
+    getLeadersBoard();
+    getChallengeBoard();
   }, []);
 
   return (
     <>
       <section className="md:bg-white_day md:-mr-12 md:flex md:flex-row md:items-center md:justify-between md:rounded-tl-3xl md:px-12 md:py-6 md:shadow-[0px_1px_0px_rgba(0,0,0,0.1)]">
         <Image
-          src={userData?.avatar ? `${userData?.avatar}` : "https://picsum.photos/200"}
+          src={
+            userData?.avatar
+              ? `${userData?.avatar}`
+              : "https://picsum.photos/200"
+          }
           priority
           height={30}
           width={30}
-          className="h-8 w-8 rounded-full md:h-16 md:w-16 hidden md:flex"
+          className="hidden h-8 w-8 rounded-full md:flex md:h-16 md:w-16"
           alt="preview images"
         />
         <p className="hidden md:block">
@@ -163,7 +165,7 @@ const getChallengeBoard = () => {
             onClick={() => {
               handleOpen();
             }}
-            disabled={openResultBoard || pathname !=='/quiz' ? true : false}
+            disabled={openResultBoard || pathname !== "/quiz" ? true : false}
           >
             {openQuizBoard && !openResultBoard ? (
               <>

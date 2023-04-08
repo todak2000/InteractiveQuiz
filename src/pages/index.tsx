@@ -21,7 +21,7 @@ export default function HomePage() {
     difficulty: 1,
     latest_score: 0,
     avatar: "",
-    email: ""
+    email: "",
   });
   const {
     loading,
@@ -34,7 +34,7 @@ export default function HomePage() {
     setUserData,
     setEmail,
     setScore,
-    setAvatar
+    setAvatar,
   } = useUser();
   const { push } = useRouter();
 
@@ -58,40 +58,40 @@ export default function HomePage() {
     setName(newUser?.name);
     setScore(newUser?.latest_score);
     setLevel(newUser.difficulty);
-    
+
     if (name !== "") {
       push("/quiz");
       setLoading(false);
     }
   };
-  const handleGoogle = async() => {
+  const handleGoogle = async () => {
     setLoading(true);
     const authResult = await handleGoogleAuth();
-    const {token, user, userScore}: any = authResult
-    
-    setToken(token)
-    setEmail(user?.email)
+    const { token, user, userScore }: any = authResult;
+
+    setToken(token);
+    setEmail(user?.email);
     setName(user?.displayName);
-    setAvatar(user?.photoURL)
+    setAvatar(user?.photoURL);
     setScore(userScore);
     setUserData({
       name: user?.displayName,
       difficulty: 1,
       latest_score: userScore,
       avatar: user?.photoURL,
-      email: user?.email
-    })
+      email: user?.email,
+    });
     setNewUser({
       name: user?.displayName,
       difficulty: 1,
       latest_score: userScore,
       avatar: user?.photoURL,
-      email: user?.email
+      email: user?.email,
     });
     setLevel(1);
     push("/quiz");
   };
-  
+
   return (
     <Layout>
       <Seo templateTitle="Home | " />
@@ -103,7 +103,7 @@ export default function HomePage() {
           </div>
         </section>
         <section className="flex min-h-full w-full flex-col items-center justify-center bg-brand_secondary">
-        <div className="md:hidden flex flex-shrink-0 flex-col items-center my-6 justify-center">
+          <div className="my-6 flex flex-shrink-0 flex-col items-center justify-center md:hidden">
             <GiBurningDot className="text-6xl text-brand_primary" />
             <p className="header-text text-brand_primary">{header}</p>
           </div>
@@ -146,13 +146,11 @@ export default function HomePage() {
             <Button
               variant="neutral"
               className="mt-4 h-[45px] w-2/3"
-              onClick={()=>{handleGoogle()}}
+              onClick={() => {
+                handleGoogle();
+              }}
             >
-              {loading ? (
-                <ImSpinner2 className="animate-spin" />
-              ) : (
-                'Google'
-              )}
+              {loading ? <ImSpinner2 className="animate-spin" /> : "Google"}
             </Button>
           </div>
         </section>

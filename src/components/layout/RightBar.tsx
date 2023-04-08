@@ -32,8 +32,8 @@ function RightBar() {
   };
   return (
     <>
-      <section className="absolute top-0 right-0 z-10 hidden md:h-[100vh] w-full bg-black opacity-30 md:block"></section>
-      <div className="absolute  top-0 right-0 z-20 h-full md:h-[100vh] w-full bg-white px-2 py-4 md:w-1/2">
+      <section className="absolute top-0 right-0 z-10 hidden w-full bg-black opacity-30 md:block md:h-[100vh]"></section>
+      <div className="absolute  top-0 right-0 z-20 h-full w-full bg-white px-2 py-4 md:h-[100vh] md:w-1/2">
         <div className="flex flex-col items-center justify-center">
           <GiBurningDot className="text-6xl text-brand_primary" />
           <p className="header-text text-brand_primary">{header}</p>
