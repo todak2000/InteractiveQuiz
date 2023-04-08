@@ -27,14 +27,14 @@ import { updatePlayerScoreFunc, getWinner } from "@/utils";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC8z9d_dQ7iFa4zz10mHIWTa9-OdPfQ96E",
+  
   authDomain: "interactivequiz-a5281.firebaseapp.com",
   projectId: "interactivequiz-a5281",
   storageBucket: "interactivequiz-a5281.appspot.com",
   messagingSenderId: "389737820485",
   appId: "1:389737820485:web:763ad6fa01c2da2f8d8e2c",
   measurementId: "G-LDFP529H3T",
-  // apiKey: process.env.NEXT_PUBLIC_apiKey,
+  apiKey: process.env.NEXT_PUBLIC_apiKey,
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -174,52 +174,6 @@ export const updatePlayerChallengeScore = async (
     console.log(error, "error");
   }
 };
-// export const updatePlayerChallengeScore = async (token: string, challengeId:string, score: number) => {
-//   try {
-//     let pullResult: any = await handleSearchChallengeBoard(challengeId)
-//     const update: any = updatePlayerScoreFunc(pullResult, token, score, true)
-//     if (update.length === 1 && !update[0].isClosed) {
-//       const boardRef = doc(db, "challengeBoard", challengeId);
-//       const res = await setDoc(boardRef,
-//         {
-//         creatorId: update[0].creatorId,
-//         levelOfDifficulty: update[0].levelOfDifficulty,
-//         noOfPlayers: update[0].noOfPlayers,
-//         noOfQuestions: update[0].noOfQuestions,
-//         stake: update[0].stake,
-//         isClosed: update[0].isClosed,
-//         playersArray: update[0].playersArray
-//       },
-//       { merge: true }
-//       );
-
-//       return res
-//     }
-//     else if (update.length === 1 && update[0].isClosed) {
-//       const winnerId: any = getWinner(update[0].playersArray)
-//       const score: number = update[0].noOfPlayers * update[0].stake
-//       sendUserScore(winnerId, score)
-//       const boardRef = doc(db, "challengeBoard", challengeId);
-//       const res = await setDoc(boardRef,
-//         {
-//         creatorId: update[0].creatorId,
-//         levelOfDifficulty: update[0].levelOfDifficulty,
-//         noOfPlayers: update[0].noOfPlayers,
-//         noOfQuestions: update[0].noOfQuestions,
-//         stake: update[0].stake,
-//         isClosed: update[0].isClosed,
-//         playersArray: update[0].playersArray
-//       },
-//       { merge: true }
-//       );
-
-//       return res
-//     }
-
-//   } catch (error) {
-//     console.log(error, "error");
-//   }
-// };
 
 // Search Leader
 export const handleSearchLeaderBoard = async (queryItem: string | number) => {
