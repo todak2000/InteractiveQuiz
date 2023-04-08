@@ -27,14 +27,13 @@ import { updatePlayerScoreFunc, getWinner } from "@/utils";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  
   authDomain: "interactivequiz-a5281.firebaseapp.com",
   projectId: "interactivequiz-a5281",
   storageBucket: "interactivequiz-a5281.appspot.com",
   messagingSenderId: "389737820485",
   appId: "1:389737820485:web:763ad6fa01c2da2f8d8e2c",
   measurementId: "G-LDFP529H3T",
-  apiKey: process.env.NEXT_PUBLIC_apiKey,
+  apiKey: process.env.NEXT_PUBLIC_apiKey, 
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
