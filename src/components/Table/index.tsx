@@ -32,7 +32,14 @@ const Table: React.FC<Props> = ({ tableHeader, data, topThree = [] }) => {
       </thead>
       <tbody>
         {data.map(({ id, email, total, isPlayed, score, playerId }, index) => (
-          <tr key={id}>
+          <tr
+            key={id}
+            className={`${
+              userData?.email === email || token === playerId
+                ? "bg-green-100"
+                : ""
+            }`}
+          >
             <td className="px-6 py-4 font-primary ">
               {index === 0 ? (
                 <SlBadge className="text-2xl text-[#d4af37]" />
@@ -40,23 +47,17 @@ const Table: React.FC<Props> = ({ tableHeader, data, topThree = [] }) => {
                 <span className="text-xs">{index + 1}</span>
               )}
             </td>
-            <td className="px-6 py-4 font-primary text-xs">
+            <td className="flex flex-row items-center px-6 py-4 font-primary text-xs">
+              {isPlayed && (
+                <HiCheckBadge className="ml-1 text-xl text-green-500" />
+              )}
               {email ? maskEmail(email) : playerId}
+              {(userData?.email === email || token === playerId) && (
+                <span className="ml-1"> (You)</span>
+              )}
             </td>
             <td className="px-6 py-4 font-primary text-xs">
               <CountUp end={total ? total : score} />{" "}
-            </td>
-
-            <td className="px-6 py-4 font-primary text-xs">
-              {isPlayed ? (
-                <HiCheckBadge className="text-2xl text-green-500" />
-              ) : (
-                // <HiCheckBadge className="text-2xl text-yellow-600"/>
-                ""
-              )}
-              {(userData?.email === email || token === playerId) && (
-                <span>You</span>
-              )}
             </td>
           </tr>
         ))}

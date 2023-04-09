@@ -18,6 +18,7 @@ import { sortDataFunc } from "@/utils";
 import CountUp from "react-countup";
 import { createChallengeFormState, createChallengeArray } from "@/constant";
 import SearchCard from "@/components/SearchCard";
+import MobileTable from "@/components/Card/MobileTable";
 import {
   createQuizChallenge,
   handleSearchChallengeBoard,
@@ -32,7 +33,7 @@ function ChallengeBoard() {
   const challengeboardData = {
     title: "Challengeboard",
   };
-  const { score, setChallengeId, token, challengeData } = useUser();
+  const { score, setChallengeId, token, challengeData, userData } = useUser();
   const { push } = useRouter();
   const [sortedData, setSortedData] = useState<challengeProps[]>([]);
   const [sortedData2, setSortedData2] = useState<any>([]);
@@ -72,7 +73,9 @@ function ChallengeBoard() {
   const handleAcceptChallenge = async (id: string, stake: number) => {
     setIsLoadingAccept(true);
     if (score > stake) {
-      acceptChallenge(token, id).then(() => setIsLoadingAccept(false));
+      acceptChallenge(token, id, userData?.email).then(() =>
+        setIsLoadingAccept(false)
+      );
     } else {
       setIsLoading(true);
       setErrMsg(
@@ -103,7 +106,8 @@ function ChallengeBoard() {
         form.levelOfDifficulty,
         form.noOfPlayers,
         form.noOfQuestions,
-        form.stake
+        form.stake,
+        userData?.email
       ).then(() => {
         setIsCreate(false);
         setIsLoading(true);
@@ -129,7 +133,11 @@ function ChallengeBoard() {
     <div>
       <Mainboard title={challengeboardData.title}>
         <div>
-          <div className="relative overflow-x-auto bg-white pt-4 shadow-md sm:rounded-lg md:p-8">
+          <p className="my-3 w-full text-center font-secondary text-xs text-red-500">
+            *** If you are seeing <b>low fund</b>, kindly go to Quizboard to
+            play and earn coins sufficent to create or accept a challenge
+          </p>
+          <div className="relative min-h-[50vh] overflow-x-auto bg-white py-4 shadow-md sm:rounded-lg md:px-8">
             {isQuiz ? (
               <QuizBoard setIsQuiz={setIsQuiz} />
             ) : (
@@ -153,17 +161,17 @@ function ChallengeBoard() {
                   </div>
                 ) : (
                   <>
-                    <div className="flex  flex-col items-start bg-white px-4 pb-4 md:flex-row md:items-center md:justify-between">
+                    <div className="mb-4 flex flex-row items-center justify-between bg-white px-4 md:flex-row md:items-center md:justify-between">
                       <SearchCard handleSearch={handleSearch} />
                       <button
-                        className="mt-4 flex h-8 w-[100px] flex-row items-center justify-between rounded-sm bg-brand_primary px-4 text-[10px] leading-[14px] text-white disabled:bg-[#a1a1a1] md:mt-0 md:h-12 md:w-auto md:rounded-xl md:text-sm"
+                        className="px-auto flex h-8 w-1/3 flex-row items-center justify-center rounded-sm bg-brand_primary text-[10px] leading-[14px] text-white disabled:bg-[#a1a1a1] md:mt-0 md:h-12 md:w-auto md:justify-start md:rounded-xl md:px-4 md:text-sm"
                         onClick={() => {
                           handleCreateChallenge();
                         }}
                         disabled={score < 100}
                       >
-                        <BsClipboardPlus className="text-lg text-white md:mr-2" />
-                        Create New Challenge
+                        <BsClipboardPlus className="mr-1 text-sm text-white md:mr-2 md:text-lg" />
+                        Create Challenge
                       </button>
                     </div>
                     {errMsg !== "" && (
@@ -172,7 +180,19 @@ function ChallengeBoard() {
                         &#x1F615; {errMsg}
                       </p>
                     )}
-                    <table className="w-full text-left text-sm text-gray-500 ">
+                    <div className="md:hidden">
+                      <MobileTable
+                        headerArray={challengeTableHeader}
+                        data={sortedData}
+                        isSearching={isSearching}
+                        handleStartChallenge={handleStartChallenge}
+                        handleShowResult={handleShowResult}
+                        isLoadingShow={isLoadingShow}
+                        isLoadingAccept={isLoadingAccept}
+                        handleAcceptChallenge={handleAcceptChallenge}
+                      />
+                    </div>
+                    <table className="hidden w-full text-left text-sm text-gray-500 md:block">
                       <thead className="bg-gray-50 text-xs uppercase text-gray-700  ">
                         <tr>
                           {challengeTableHeader.map(({ id, text }) => {
@@ -186,7 +206,6 @@ function ChallengeBoard() {
                               </th>
                             );
                           })}
-                          <th></th>
                         </tr>
                       </thead>
                       <tbody
@@ -201,7 +220,7 @@ function ChallengeBoard() {
                         ) : (
                           <>
                             {sortedData?.length <= 0 && (
-                              <div className="right-1/ absolute left-1/4 mt-10 flex w-1/2 flex-col items-center justify-center bg-white">
+                              <div className="absolute right-1/4 left-1/4 mt-10 flex w-1/2 flex-col items-center justify-center bg-white">
                                 <BsClipboardData className="my-4 text-3xl text-[#414141]" />
                                 <span className="h-12 font-secondary text-sm text-[#818181]">
                                   Oops! No Challenge. Start One
@@ -475,20 +494,21 @@ function ChallengeBoard() {
               </>
             )}
           </div>
+
           {showChallengeResult && (
-            <div className="absolute top-0 left-0 h-full bg-white  md:left-auto md:right-0 md:p-4">
+            <div className="absolute top-0 left-0 h-screen w-screen bg-white md:left-auto md:right-0  md:h-full md:w-auto md:p-4">
               <Table
                 tableHeader={boardTableHeader}
                 data={sortedData2}
                 topThree={[]}
               />
               <button
-                className=" mx-auto flex h-8 w-[130px] flex-row items-center justify-between bg-transparent px-4 text-[10px] leading-[14px] text-[#414141] disabled:bg-[#a1a1a1] md:h-12 md:w-auto md:rounded-xl md:text-sm"
+                className=" mx-auto my-4 flex h-8 flex-row items-center justify-between bg-gray-200 px-4 text-[10px] leading-[14px] text-[#414141] disabled:bg-[#a1a1a1] md:h-12  md:text-sm"
                 onClick={() => {
                   setShowChallengeResult(false);
                 }}
               >
-                <IoCloseCircleSharp className="text-lg text-[#414141] md:mr-2" />
+                <IoCloseCircleSharp className="mr-2 text-lg text-[#414141]" />
                 Close
               </button>
             </div>

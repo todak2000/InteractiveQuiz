@@ -25,7 +25,7 @@ const SearchCard: React.FC<Props> = ({ handleSearch }) => {
       <input
         type="text"
         id="table-search"
-        className="mx-auto block w-80 rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 md:mx-0"
+        className="mx-auto block rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 md:mx-0 md:w-80 md:pl-10"
         placeholder="Search"
         onChange={handleSearch}
       />

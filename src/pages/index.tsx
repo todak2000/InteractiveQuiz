@@ -142,7 +142,6 @@ export default function HomePage() {
                 homeButtonText
               )}
             </Button> */}
-
             <Button
               variant="neutral"
               className="mt-4 h-[45px] w-2/3"

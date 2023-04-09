@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@firebase/firestore": "^3.10.0",
+    "@types/react-star-ratings": "^2.3.0",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
     "firebase": "^9.19.1",
@@ -30,6 +31,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-share": "^4.4.1",
+    "react-simple-star-rating": "^5.1.7",
+    "react-star-ratings": "^2.3.0",
     "react-svg": "^15.1.17",
     "tailwind-merge": "^1.8.1",
     "use-sound": "^4.0.1"

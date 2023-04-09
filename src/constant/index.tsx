@@ -3,7 +3,9 @@ export const header = "Interactive Quiz";
 export const whiteHeaderText = "Get Started";
 export const homeButtonText = "Begin";
 export const socialMediaUrl = "https://interactivequiz.onrender.com";
-
+export const ratingButtonText = "Submit";
+export const feedbackResponseText =
+  "Thank you for taking the time to provide feedback! We appreciate your thoughts and will use them to improve our Product.";
 export const createChallengeFormState = {
   creatorId: "",
   noOfPlayers: "",
@@ -25,7 +27,7 @@ export const createChallengeArray = [
     label: "Number of Questions",
     type: "number",
     name: "noOfQuestions",
-    placeholder: "10",
+    placeholder: "e.g. 10",
     value: "",
     note: "Min of 10 and Max of 30",
   },
@@ -34,7 +36,7 @@ export const createChallengeArray = [
     label: "Stake Amount",
     name: "stake",
     type: "text",
-    placeholder: "2000",
+    placeholder: "e.g. 2000",
     value: "",
     note: "Min of 100 coins and Max of 5000 coins",
   },
@@ -43,7 +45,7 @@ export const createChallengeArray = [
     label: "Number of Players",
     name: "noOfPlayers",
     type: "number",
-    placeholder: "2",
+    placeholder: "e.g. 2",
     value: "",
     note: "Min of 2 and Max of 5",
   },

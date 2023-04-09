@@ -1,11 +1,21 @@
 import { sortBy } from "lodash";
 
-export const maskEmail = (email: string) => {
-  const splitEmail = email?.split("@");
-  const maskedEmail =
-    splitEmail[0].replace(/.(?=.{2})/g, "*") + "@" + splitEmail[1];
-  return maskedEmail;
-};
+// export const maskEmail = (email: string) => {
+//   const splitEmail = email?.split("@");
+//   const maskedEmail =
+//     splitEmail[0].replace(/.(?=.{2})/g, "*") + "@" + splitEmail[1];
+//   return maskedEmail;
+// };
+
+export const maskEmail = (email: string)=> {
+  var splitEmail = email.split("@")
+  if (splitEmail[0].length > 7) {
+    return splitEmail[0].slice(0, 7) + "...";
+  } else {
+    return splitEmail[0]
+  }
+}
+
 
 export const sortDataFunc = (data: object[]) => {
   const sortedDat = sortBy(data, "total").reverse().slice(0, 20);
@@ -70,7 +80,6 @@ export const updatePlayerScoreFunc = (
   if (noOfPlayed === noOfPlayers) {
     arr[0].isClosed = true;
   }
-  console.log(arr, "new arr");
   return arr;
 };
 

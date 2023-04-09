@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextInput from "../TextInput/TextInput";
 import { ImSpinner2 } from "react-icons/im";
 import Button from "../buttons/Button";
@@ -44,6 +44,9 @@ const Form: React.FC<Props> = ({
       [e.target.name]: e.target.value,
     });
   };
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   return (
     <div className="flex w-[90%] flex-col items-center justify-center pb-10 md:w-1/3">
@@ -67,6 +70,7 @@ const Form: React.FC<Props> = ({
         variant="submit"
         className="mt-4 h-[45px] w-2/3"
         onClick={() => {
+          setLoading(true);
           handleSubmit(form);
         }}
         disabled={
@@ -79,7 +83,7 @@ const Form: React.FC<Props> = ({
             : true
         }
       >
-        {isLoading ? (
+        {loading ? (
           <ImSpinner2 className="animate-spin" />
         ) : (
           "Create New Challenge"

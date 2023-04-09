@@ -31,6 +31,9 @@ const nextConfig = {
 
     return config;
   },
+  env: {
+    NEXT_PUBLIC_apiKey: process.env.NEXT_PUBLIC_apiKey
+  }
 };
 
 module.exports = nextConfig;

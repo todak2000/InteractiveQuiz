@@ -7,26 +7,15 @@ import Card from "@/components/Card";
 import { GiTrophyCup } from "react-icons/gi";
 import { SlClose } from "react-icons/sl";
 import { ImSpinner2 } from "react-icons/im";
-import { socialMediaUrl } from "@/constant";
 import { useRouter } from "next/router";
-import {
-  FacebookShareButton,
-  FacebookIcon,
-  LinkedinShareButton,
-  LinkedinIcon,
-  TelegramShareButton,
-  TelegramIcon,
-  TwitterShareButton,
-  TwitterIcon,
-  WhatsappShareButton,
-  WhatsappIcon,
-} from "react-share";
+import Rating from "../Rating";
 import useSound from "use-sound";
 import {
   sendUserScore,
   handleSearchChallengeBoard,
   updatePlayerChallengeScore,
 } from "@/firebase";
+import SocialMedia from "../socialMedia";
 
 type Props = {
   setIsQuiz: React.Dispatch<React.SetStateAction<boolean>>;
@@ -182,41 +171,9 @@ const QuizBoard: React.FC<Props> = ({ setIsQuiz }) => {
                 return <Card key={id} text={text} value={value} icon={icon} />;
               })}
 
-              <div className="my-10 flex w-full flex-row items-center justify-evenly md:w-1/2 ">
-                <FacebookShareButton
-                  url={socialMediaUrl}
-                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-                  quote={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-                >
-                  <FacebookIcon size={32} round />
-                </FacebookShareButton>
-                <WhatsappShareButton
-                  url={socialMediaUrl}
-                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-                  separator=":: "
-                >
-                  <WhatsappIcon size={32} round />
-                </WhatsappShareButton>
-                <LinkedinShareButton
-                  url={socialMediaUrl}
-                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-                >
-                  <LinkedinIcon size={32} round />
-                </LinkedinShareButton>
-                <TwitterShareButton
-                  url={socialMediaUrl}
-                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-                >
-                  <TwitterIcon size={32} round />
-                </TwitterShareButton>
-                <TelegramShareButton
-                  url={socialMediaUrl}
-                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-                >
-                  <TelegramIcon size={32} round />
-                </TelegramShareButton>
-              </div>
+              <SocialMedia quizScore={quizScore} />
 
+              <Rating />
               <SlClose
                 size={25}
                 className=" absolute top-4 right-4 mb-4 cursor-pointer text-red-400"
