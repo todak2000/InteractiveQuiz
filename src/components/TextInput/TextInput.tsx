@@ -68,7 +68,7 @@ const TextInput: React.FC<Props> = ({
                 (2 > Number(value) || 5 < Number(value))
               ? "border-[#FF395B]"
               : "border-brand_primary"
-          } ${inputBg} h-[45px] w-full rounded text-xs font-thin placeholder-gray-300  text-[#414141] md:w-[100%]`}
+          } ${inputBg} h-[45px] w-full rounded text-xs font-thin text-[#414141]  placeholder-gray-300 md:w-[100%]`}
         />
       )}
       {note && (

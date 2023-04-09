@@ -27,14 +27,13 @@ import { updatePlayerScoreFunc, getWinner } from "@/utils";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC8z9d_dQ7iFa4zz10mHIWTa9-OdPfQ96E", 
   authDomain: "interactivequiz-a5281.firebaseapp.com",
   projectId: "interactivequiz-a5281",
   storageBucket: "interactivequiz-a5281.appspot.com",
   messagingSenderId: "389737820485",
   appId: "1:389737820485:web:763ad6fa01c2da2f8d8e2c",
   measurementId: "G-LDFP529H3T",
-  // apiKey: process.env.NEXT_PUBLIC_apiKey,
+  apiKey: process.env.NEXT_PUBLIC_apiKey,
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -113,7 +112,11 @@ export const sendUserScore = async (token: string, score: number) => {
 };
 
 // accept Challenge
-export const acceptChallenge = async (token: string, challengeId: string, email:any) => {
+export const acceptChallenge = async (
+  token: string,
+  challengeId: string,
+  email: any
+) => {
   try {
     let pullResult: any = await handleSearchChallengeBoard(challengeId);
     if (pullResult[0].playersArray.length < pullResult[0].noOfPlayers) {
@@ -235,7 +238,7 @@ export const createQuizChallenge = async (
   noOfPlayers: string,
   noOfQuestions: string,
   stake: string,
-  email: any,
+  email: any
 ): Promise<void> => {
   try {
     let id = `chall${Math.floor(Math.random() * 999999) + 1}ge`;
@@ -272,7 +275,11 @@ export const createQuizChallenge = async (
 
 // submit ratings and comment
 
-export const submitRating = async (rating: number, comment: string, email: string|any): Promise<void> => {
+export const submitRating = async (
+  rating: number,
+  comment: string,
+  email: string | any
+): Promise<void> => {
   try {
     let id = `com${Math.floor(Math.random() * 999) + 1}ra`;
     const newUserScoreDB = doc(db, "Feedback", id);

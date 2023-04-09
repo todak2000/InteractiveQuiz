@@ -7,15 +7,14 @@ import { sortBy } from "lodash";
 //   return maskedEmail;
 // };
 
-export const maskEmail = (email: string)=> {
-  var splitEmail = email.split("@")
+export const maskEmail = (email: string) => {
+  var splitEmail = email.split("@");
   if (splitEmail[0].length > 7) {
     return splitEmail[0].slice(0, 7) + "...";
   } else {
-    return splitEmail[0]
+    return splitEmail[0];
   }
-}
-
+};
 
 export const sortDataFunc = (data: object[]) => {
   const sortedDat = sortBy(data, "total").reverse().slice(0, 20);
