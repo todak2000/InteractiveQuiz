@@ -76,6 +76,7 @@ const Form: React.FC<Props> = ({
         disabled={
           form.levelOfDifficulty !== "" &&
           form.noOfPlayers !== "" &&
+          form.noOfPlayers > 1 &&
           form.noOfQuestions !== "" &&
           form.stake !== "" &&
           score > Number(form.stake)

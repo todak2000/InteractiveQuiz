@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import QuestionCard from "../questionCard";
-import { questionsArray } from "@/constant";
+// import { questionsArray } from "@/constant/questions";
+import { questionsArray } from "@/constant/questions";
 import AnswerCard from "../answerCard";
 import { useUser } from "@/store/user";
 import Card from "@/components/Card";
@@ -24,7 +25,6 @@ const QuizBoard: React.FC<Props> = ({ setIsQuiz }) => {
   const { push } = useRouter();
   const {
     score,
-    userData,
     setSeconds,
     setOpenQuizBoard,
     seconds,
@@ -171,7 +171,11 @@ const QuizBoard: React.FC<Props> = ({ setIsQuiz }) => {
                 return <Card key={id} text={text} value={value} icon={icon} />;
               })}
 
-              <SocialMedia quizScore={quizScore} />
+              <div className="my-10 flex w-full flex-row items-center justify-evenly md:w-1/2">
+                <SocialMedia
+                  title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
+                />
+              </div>
 
               <Rating />
               <SlClose

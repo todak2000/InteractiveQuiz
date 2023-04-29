@@ -10,8 +10,6 @@ import {
   where,
   getDocs,
   getDoc,
-  updateDoc,
-  arrayUnion,
 } from "@firebase/firestore";
 import {
   getAuth,
@@ -221,9 +219,11 @@ export const handleSearchChallengeBoard = async (queryItem: string | any) => {
 };
 
 export const getScoreUpdate = async (email: any) => {
+  
   try {
     const userScoreDB = collection(db, "leadersBoard");
     const scoreQuery = query(userScoreDB, where("email", "==", email));
+    
     const querySnapshot = await getDocs(scoreQuery);
     return querySnapshot.docs[0].data().total;
   } catch (err) {

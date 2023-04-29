@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { GiTrophyCup } from "react-icons/gi";
 import { useRouter } from "next/router";
 import Layout from "@/components/layout/Layout";
@@ -11,10 +11,8 @@ import { selectOptions } from "@/constant";
 import { GiTwoCoins } from "react-icons/gi";
 import CountUp from "react-countup";
 import Image from "next/image";
-import { getScoreUpdate } from "@/firebase";
-import { db } from "@/firebase";
-import { collection, onSnapshot } from "@firebase/firestore";
 import { handleGoogleOut } from "@/firebase";
+import { getScoreUpdate } from "@/firebase";
 
 type TopBarProps = {
   username: string | any;
@@ -26,20 +24,25 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
     setLevel,
     setUserData,
     userData,
-    setScore,
     setOpenQuizBoard,
     openQuizBoard,
     openResultBoard,
     setOpenResultBoard,
     score,
+    setScore,
     level,
-    setChallengeData,
-    setBoardData,
     setLoading,
   } = useUser();
 
   const [scoree, setScoree] = useState(score);
   useEffect(() => {
+    getScoreUpdate(userData?.email).then((res) => {
+      setScore(res);
+    });
+  }, [])
+  
+  useEffect(() => {
+    
     setScoree(score);
   }, [score]);
 
@@ -61,44 +64,6 @@ const TopBar: NextPageWithLayout<TopBarProps> = ({ username }) => {
       localStorage.clear();
     });
   };
-  const getChallengeBoard = () => {
-    const challengeBoard = collection(db, "challengeBoard");
-    onSnapshot(challengeBoard, (querySnapshot) => {
-      setChallengeData(
-        // querySnapshot.docs.filter((doc)=>doc.data().isClosed == false).map((doc) => ({
-        querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          creatorId: doc.data().creatorId,
-          levelOfDifficulty: doc.data().levelOfDifficulty,
-          noOfPlayers: doc.data().noOfPlayers,
-          noOfQuestions: doc.data().noOfQuestions,
-          stake: doc.data().stake,
-          isClosed: doc.data().isClosed,
-          playersArray: doc.data().playersArray,
-        }))
-      );
-    });
-  };
-
-  const getLeadersBoard = () => {
-    const userScoreDB = collection(db, "leadersBoard");
-    onSnapshot(userScoreDB, (querySnapshot) => {
-      setBoardData(
-        querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          email: doc.data().email,
-          total: doc.data().total,
-        }))
-      );
-      getScoreUpdate(userData?.email).then((res) => {
-        setScore(res);
-      });
-    });
-  };
-  useEffect(() => {
-    getLeadersBoard();
-    getChallengeBoard();
-  }, []);
 
   return (
     <>

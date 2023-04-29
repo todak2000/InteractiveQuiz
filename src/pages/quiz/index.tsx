@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import Mainboard from "@/pages/common/mainboard";
 import Card from "@/components/Card";
 import { useUser } from "@/store/user";
@@ -21,7 +21,7 @@ function Dashboard() {
     boardData,
     token,
     userData,
-    challengeId,
+    setLoading,
     setChallengeId,
     setOpenQuizBoard,
   } = useUser();
@@ -53,6 +53,7 @@ function Dashboard() {
   ];
 
   useEffect(() => {
+    setLoading(false);
     setOpenQuizBoard(false);
     setOpenResultBoard(false);
     setIsReadInstructions(false);

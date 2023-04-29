@@ -67,7 +67,7 @@ const AnswerCard: React.FC<CardItem> = ({
       >
         Skip
       </button>
-      {answerArr.map(({ id, text }) => {
+      {answerArr && answerArr?.map(({ id, text }) => {
         if (isPickedId !== null && correctAnsId === id && isPickedId === id) {
           play();
         }

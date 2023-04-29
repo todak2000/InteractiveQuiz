@@ -2,6 +2,9 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 import { useLocalStorageState } from "../hooks";
 import { boardProps } from "@/pages/board";
+import { getScoreUpdate } from "@/firebase";
+import { db } from "@/firebase";
+import { collection, onSnapshot } from "@firebase/firestore";
 
 export type UserProp = {
   name: string;
@@ -57,6 +60,10 @@ export type UserContextProps = {
   challengeData: challengeProps[];
   challengeId: any;
   setChallengeId: React.Dispatch<React.SetStateAction<any>>;
+  totalChallenges: number;
+  setTotalChallenges: React.Dispatch<React.SetStateAction<number>>;
+  totalPlayers: number;
+  setTotalPlayers: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const UserContext = createContext<UserContextProps>({
@@ -90,6 +97,10 @@ const UserContext = createContext<UserContextProps>({
   challengeId: "",
   setChallengeId: () => null,
   setAvatar: () => null,
+  totalChallenges: 0,
+  setTotalChallenges: () => null,
+  totalPlayers: 0,
+  setTotalPlayers: () => null,
 });
 
 let userObject = {
@@ -147,7 +158,50 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [boardData, setBoardData] = useState<any[]>([]);
   const [challengeData, setChallengeData] = useState<any[]>([]);
   const [seconds, setSeconds] = useState(15);
+  const [totalPlayers, setTotalPlayers] = useState(0);
+  const [totalChallenges, setTotalChallenges] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  const getChallengeBoard = () => {
+    const challengeBoard = collection(db, "challengeBoard");
+    onSnapshot(challengeBoard, (querySnapshot) => {
+      setTotalChallenges(querySnapshot.docs.length);
+      setChallengeData(
+        // querySnapshot.docs.filter((doc)=>doc.data().isClosed == false).map((doc) => ({
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          creatorId: doc.data().creatorId,
+          levelOfDifficulty: doc.data().levelOfDifficulty,
+          noOfPlayers: doc.data().noOfPlayers,
+          noOfQuestions: doc.data().noOfQuestions,
+          stake: doc.data().stake,
+          isClosed: doc.data().isClosed,
+          playersArray: doc.data().playersArray,
+        }))
+      );
+    });
+  };
+
+  const getLeadersBoard = () => {
+    const userScoreDB = collection(db, "leadersBoard");
+    onSnapshot(userScoreDB, (querySnapshot) => {
+      setTotalPlayers(querySnapshot.docs.length);
+      setBoardData(
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          email: doc.data().email,
+          total: doc.data().total,
+        }))
+      );
+      getScoreUpdate(userData?.email).then((res) => {
+        setScore(res);
+      });
+    });
+  };
+  useEffect(() => {
+    getLeadersBoard();
+    getChallengeBoard();
+  }, []);
 
   useEffect(() => {
     switch (Number(level)) {
@@ -199,6 +253,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setChallengeData,
         challengeId,
         setChallengeId,
+        totalChallenges,
+        setTotalChallenges,
+        totalPlayers,
+        setTotalPlayers,
       }}
     >
       {children}

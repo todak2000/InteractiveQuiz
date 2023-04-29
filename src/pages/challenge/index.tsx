@@ -28,6 +28,7 @@ import { challengeProps } from "@/store/user";
 import { checkPlayerId } from "@/utils";
 import Table from "@/components/Table";
 import { sortResultFunc } from "@/utils";
+import SocialMedia from "@/components/socialMedia";
 
 function ChallengeBoard() {
   const challengeboardData = {
@@ -47,6 +48,9 @@ function ChallengeBoard() {
     useState<boolean>(false);
 
   const [isCreate, setIsCreate] = useState<boolean>(false);
+  const [isShare, setIsShare] = useState<string>("");
+
+  const socialMediaTitle = `${userData?.name} challlenges you to a Quiz Duel. Click Here to  Sign Up and Accept the Quiz Challenge! Find the Challenge ID: ${isShare} and Test Your Knowledge!`;
 
   const handleSearch = async (e: React.FormEvent<HTMLInputElement>) => {
     const value = (e.target as HTMLInputElement).value;
@@ -66,6 +70,14 @@ function ChallengeBoard() {
     }
   };
 
+  const handleShare = (id: string) => {
+    console.log("sds");
+    if (isShare === id) {
+      setIsShare("");
+    } else {
+      setIsShare(id);
+    }
+  };
   const handleCreateChallenge = () => {
     setErrMsg("");
     setIsCreate(true);
@@ -184,6 +196,9 @@ function ChallengeBoard() {
                       <MobileTable
                         headerArray={challengeTableHeader}
                         data={sortedData}
+                        socialMediaTitle={socialMediaTitle}
+                        handleShare={handleShare}
+                        isShare={isShare}
                         isSearching={isSearching}
                         handleStartChallenge={handleStartChallenge}
                         handleShowResult={handleShowResult}
@@ -358,8 +373,18 @@ function ChallengeBoard() {
                                               noOfPlayers &&
                                             !checkPlayerId(playersArray, token)
                                               .isPlayed && (
-                                              <HiShare className="cursor-pointer text-[#818181]" />
+                                              <HiShare
+                                                className="relative cursor-pointer text-[#818181]"
+                                                onClick={() => handleShare(id)}
+                                              />
                                             )}
+                                          {isShare === id && (
+                                            <div className="absolute top-[50%] right-0 grid grid-rows-3 gap-1">
+                                              <SocialMedia
+                                                title={socialMediaTitle}
+                                              />
+                                            </div>
+                                          )}
                                         </td>
                                       </tr>
                                     ) : !isClosed ? (
@@ -475,8 +500,18 @@ function ChallengeBoard() {
                                               noOfPlayers &&
                                             !checkPlayerId(playersArray, token)
                                               .isPlayed && (
-                                              <HiShare className="cursor-pointer text-[#818181]" />
+                                              <HiShare
+                                                className="relative cursor-pointer text-[#818181]"
+                                                onClick={() => handleShare(id)}
+                                              />
                                             )}
+                                          {isShare === id && (
+                                            <div className="absolute top-[50%] right-0 grid grid-rows-3 gap-1">
+                                              <SocialMedia
+                                                title={socialMediaTitle}
+                                              />
+                                            </div>
+                                          )}
                                         </td>
                                       </tr>
                                     ) : (

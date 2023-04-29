@@ -9,6 +9,7 @@ enum ButtonVariant {
   "neutral",
   "submit",
   "challenge",
+  "navButton",
 }
 
 enum ButtonSize {
@@ -73,10 +74,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           [
             variant === "neutral" && [
               "h-[19px] w-[69px] rounded-sm bg-transparent text-[#A1A1A1] md:h-[46px] md:w-[137px]",
-              "border-0",
+              "border-[0.5px] border-[#cccccc]",
               "hover:border-button_bg_color hover:bg-white hover:text-button_bg_color active:bg-gray-700 disabled:bg-gray-700",
             ],
-
+            variant === "navButton" && [
+              "h-[46px] w-full rounded-sm bg-white text-button_bg_color md:w-[200px]",
+              "border-transaprent border-0 md:border",
+              "hover:border-white hover:bg-button_bg_color hover:text-white active:bg-gray-700 disabled:bg-gray-700",
+            ],
             variant === "submit" && [
               "h-[27px] w-[83px] rounded-sm bg-brand_primary text-white md:h-[54px] md:w-[209px]",
               "border border-button_bg_color",

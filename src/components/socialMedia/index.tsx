@@ -2,10 +2,6 @@ import React from "react";
 import {
   FacebookShareButton,
   FacebookIcon,
-  LinkedinShareButton,
-  LinkedinIcon,
-  TelegramShareButton,
-  TelegramIcon,
   TwitterShareButton,
   TwitterIcon,
   WhatsappShareButton,
@@ -14,45 +10,22 @@ import {
 import { socialMediaUrl } from "@/constant";
 
 interface Props {
-  quizScore: number;
+  title: string;
 }
 
-const SocialMediaShare: React.FC<Props> = ({ quizScore }) => {
+const SocialMediaShare: React.FC<Props> = ({ title }) => {
   return (
-    <div className="my-10 flex w-full flex-row items-center justify-evenly md:w-1/2 ">
-      <FacebookShareButton
-        url={socialMediaUrl}
-        title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-        quote={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-      >
-        <FacebookIcon size={32} round />
+    <>
+      <FacebookShareButton url={socialMediaUrl} title={title} quote={title}>
+        <FacebookIcon size={25} round />
       </FacebookShareButton>
-      <WhatsappShareButton
-        url={socialMediaUrl}
-        title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-        separator=":: "
-      >
-        <WhatsappIcon size={32} round />
+      <WhatsappShareButton url={socialMediaUrl} title={title} separator=":: ">
+        <WhatsappIcon size={25} round />
       </WhatsappShareButton>
-      <LinkedinShareButton
-        url={socialMediaUrl}
-        title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-      >
-        <LinkedinIcon size={32} round />
-      </LinkedinShareButton>
-      <TwitterShareButton
-        url={socialMediaUrl}
-        title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-      >
-        <TwitterIcon size={32} round />
+      <TwitterShareButton url={socialMediaUrl} title={title}>
+        <TwitterIcon size={25} round />
       </TwitterShareButton>
-      <TelegramShareButton
-        url={socialMediaUrl}
-        title={`I just aced this quiz with a score of ${quizScore}! Challenge yourself and see if you can beat my score!`}
-      >
-        <TelegramIcon size={32} round />
-      </TelegramShareButton>
-    </div>
+    </>
   );
 };
 

@@ -38,6 +38,7 @@
   .font-secondary {
     font-family: "Clash Display";
   }
+  
   .normal-text {
     @apply font-primary text-[16px] font-thin leading-[22px];
   }

@@ -9,11 +9,14 @@ import { RiSpaceShipLine } from "react-icons/ri";
 import { checkPlayerId } from "@/utils";
 import { HiCheckBadge, HiShare } from "react-icons/hi2";
 import { useUser } from "@/store/user";
-
+import SocialMedia from "../socialMedia";
 type CardItem = {
   headerArray: any[];
   data: any[];
   isSearching: boolean;
+  socialMediaTitle: string;
+  isShare: string;
+  handleShare: (id: string) => void;
   handleStartChallenge: (id: string) => void;
   handleShowResult: (playersArray: any[]) => void;
   isLoadingShow: boolean;
@@ -22,16 +25,18 @@ type CardItem = {
 };
 
 const MobileTable = ({
-  headerArray,
   isLoadingAccept,
   data,
   isLoadingShow,
+  socialMediaTitle,
   isSearching,
+  isShare,
+  handleShare,
   handleStartChallenge,
   handleShowResult,
   handleAcceptChallenge,
 }: CardItem) => {
-  const { token, score } = useUser();
+  const { token, score, userData } = useUser();
   return (
     <>
       {data?.length <= 0 && !isSearching && (
@@ -85,8 +90,16 @@ const MobileTable = ({
                         {checkPlayerId(playersArray, token).isPlayer &&
                           playersArray?.length < noOfPlayers &&
                           !checkPlayerId(playersArray, token).isPlayed && (
-                            <HiShare className="cursor-pointer text-[#818181]" />
+                            <HiShare
+                              className="relative cursor-pointer text-[#818181]"
+                              onClick={() => handleShare(id)}
+                            />
                           )}
+                        {isShare === id && (
+                          <div className="absolute top-[70%] right-0 grid grid-rows-3 gap-1">
+                            <SocialMedia title={socialMediaTitle} />
+                          </div>
+                        )}
                       </span>
                     </div>
 
@@ -111,7 +124,6 @@ const MobileTable = ({
                       </span>
                     </div>
                     <div className="my-1 grid grid-cols-3 gap-1">
-                      {/* <span className="p-3 bg-grey-600 rounded-md">Hard</span> */}
                       <span className="flex flex-row items-center  font-secondary text-xs text-[#414141]">
                         {" "}
                         <GiTwoCoins className="mr-2 text-brand_primary" />
@@ -193,12 +205,19 @@ const MobileTable = ({
                         <BsHash /> {id}
                       </span>
                       <span className="flex flex-row items-center  font-secondary text-xs font-bold text-[#414141]">
-                        <HiShare className="cursor-pointer text-[#818181]" />
                         {checkPlayerId(playersArray, token).isPlayer &&
                           playersArray?.length < noOfPlayers &&
                           !checkPlayerId(playersArray, token).isPlayed && (
-                            <HiShare className="cursor-pointer text-[#818181]" />
+                            <HiShare
+                              className="relative cursor-pointer text-[#818181]"
+                              onClick={() => handleShare(id)}
+                            />
                           )}
+                        {isShare === id && (
+                          <div className="absolute top-[70%] right-0 grid grid-rows-3 gap-1">
+                            <SocialMedia title={socialMediaTitle} />
+                          </div>
+                        )}
                       </span>
                     </div>
 
@@ -223,7 +242,6 @@ const MobileTable = ({
                       </span>
                     </div>
                     <div className="my-1 grid grid-cols-3 gap-1">
-                      {/* <span className="p-3 bg-grey-600 rounded-md">Hard</span> */}
                       <span className="flex flex-row items-center  font-secondary text-xs text-[#414141]">
                         {" "}
                         <GiTwoCoins className="mr-2 text-brand_primary" />

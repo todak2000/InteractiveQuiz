@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://interactivequiz.onrender.com</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-09T20:51:58.774Z</lastmod></url>
-<url><loc>https://interactivequiz.onrender.com/board</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-09T20:51:58.774Z</lastmod></url>
-<url><loc>https://interactivequiz.onrender.com/challenge</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-09T20:51:58.774Z</lastmod></url>
-<url><loc>https://interactivequiz.onrender.com/common/mainboard</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-09T20:51:58.774Z</lastmod></url>
-<url><loc>https://interactivequiz.onrender.com/quiz</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-09T20:51:58.774Z</lastmod></url>
+<url><loc>https://interactivequiz.onrender.com</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-29T03:20:35.813Z</lastmod></url>
+<url><loc>https://interactivequiz.onrender.com/board</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-29T03:20:35.813Z</lastmod></url>
+<url><loc>https://interactivequiz.onrender.com/challenge</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-29T03:20:35.813Z</lastmod></url>
+<url><loc>https://interactivequiz.onrender.com/common/mainboard</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-29T03:20:35.813Z</lastmod></url>
+<url><loc>https://interactivequiz.onrender.com/landingpage/Footer</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-29T03:20:35.813Z</lastmod></url>
+<url><loc>https://interactivequiz.onrender.com/landingpage/Hero</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-29T03:20:35.813Z</lastmod></url>
+<url><loc>https://interactivequiz.onrender.com/landingpage/How</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-29T03:20:35.813Z</lastmod></url>
+<url><loc>https://interactivequiz.onrender.com/landingpage/NavBar</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-29T03:20:35.813Z</lastmod></url>
+<url><loc>https://interactivequiz.onrender.com/quiz</loc><changefreq>daily</changefreq><priority>0.7</priority><lastmod>2023-04-29T03:20:35.813Z</lastmod></url>
 </urlset>
